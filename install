@@ -41,9 +41,10 @@ echo "Repository: ${REPO_NAME}" >&2
 echo "Script: ${SCRIPT_NAME:-${DEFAULT_SCRIPT}}" >&2
 echo "" >&2
 
-if ! curl -fsSL "${SCRIPT_URL}" | bash -s -- "${EXTRA_ARGS[@]}"; then
+HTTP_CODE=$(curl -sSL -o /dev/null -w "%{http_code}" "${SCRIPT_URL}")
+
+if [[ "${HTTP_CODE}" == "404" ]]; then
     if [[ "${REPO_PATH}" != */* ]]; then
-        echo "" >&2
         echo "Error: Default script '${DEFAULT_SCRIPT}' not found in ${REPO_NAME}" >&2
         echo "" >&2
         echo "Solutions:" >&2
@@ -51,8 +52,11 @@ if ! curl -fsSL "${SCRIPT_URL}" | bash -s -- "${EXTRA_ARGS[@]}"; then
         echo "  2. Specify the script name explicitly:" >&2
         echo "     curl ... | bash -s ${REPO_NAME}/<your-script-name>" >&2
     else
-        echo "" >&2
         echo "Error: Script '${SCRIPT_NAME}' not found in ${REPO_NAME}" >&2
     fi
+    exit 1
+fi
+
+if ! curl -fsSL "${SCRIPT_URL}" | bash -s -- "${EXTRA_ARGS[@]}"; then
     exit 1
 fi
