@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="dark light" />
+        <meta
+            name="theme-color"
+            content="#100F0F"
+            media="(prefers-color-scheme: dark)"
+        />
+        <meta
+            name="theme-color"
+            content="#FFFCF0"
+            media="(prefers-color-scheme: light)"
+        />
+        <title>dotman | The modern dotfiles manager</title>
+        <!-- Inter for UI text, JetBrains Mono for Code -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <div class="container header-inner">
+                <a href="index.html" class="logo"> <span>~/</span>dotman </a>
+                <nav class="nav-links">
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#install">Install</a>
+                    <a href="docs.html" style="color: var(--text-primary)"
+                        >Docs</a
+                    >
+                    <a
+                        href="https://github.com/gabrielcapilla/dotman.git"
+                        target="_blank"
+                        >GitHub</a
+                    >
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="container">
+                    <h1>Dotfiles simplified</h1>
+                    <p>
+                        Stop fighting with broken symlinks. Dotman just works.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#install" class="btn btn-primary"
+                            >Get Started</a
+                        >
+                        <a
+                            href="https://github.com/gabrielcapilla/dotman.git"
+                            class="btn btn-outline"
+                            >View on GitHub</a
+                        >
+                    </div>
+
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="terminal-title">dotman</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-content">
+                                <!-- Step 1: Init -->
+                                <div class="line step-1">
+                                    <span class="prompt">➜ ~</span>
+                                    <span class="cmd"
+                                        ><span class="shell-command"
+                                            >dotman</span
+                                        >
+                                        <span class="shell-argument"
+                                            >init</span
+                                        ></span
+                                    >
+                                </div>
+                                <div class="output step-1-out">
+                                    Initialized at
+                                    <span class="shell-path">~/.dotfiles</span>
+                                </div>
+
+                                <!-- Step 2: Set -->
+                                <div class="line step-2">
+                                    <span class="prompt">➜ ~</span>
+                                    <span class="cmd"
+                                        ><span class="shell-command"
+                                            >dotman</span
+                                        >
+                                        <span class="shell-argument">set</span>
+                                        <span class="shell-path"
+                                            >~/.config/nvim</span
+                                        ></span
+                                    >
+                                </div>
+                                <div class="output step-2-out">
+                                    Set:
+                                    <span class="shell-path"
+                                        >~/.config/nvim</span
+                                    >
+                                    →
+                                    <span class="shell-path"
+                                        >~/.dotfiles/main/config/nvim</span
+                                    >
+                                </div>
+
+                                <!-- Step 3: Add -->
+                                <div class="line step-3">
+                                    <span class="prompt">➜ ~</span>
+                                    <span class="cmd"
+                                        ><span class="shell-command"
+                                            >dotman</span
+                                        >
+                                        <span class="shell-argument">add</span>
+                                        <span class="shell-string"
+                                            >fish</span
+                                        ></span
+                                    >
+                                </div>
+                                <div class="output step-3-out">
+                                    <span class="shell-comment"
+                                        >Validating links...</span
+                                    ><br />
+                                    Creating symlinks...
+                                </div>
+
+                                <!-- Step 4: Docs link -->
+                                <div class="line step-4">
+                                    <span class="prompt">➜ ~</span>
+                                    <span class="cmd"
+                                        ><span class="shell-argument"
+                                            >Read</span
+                                        >
+                                        <a href="docs.html" class="shell-link"
+                                            >docs</a
+                                        ></span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="features">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Why use dotman?</h2>
+                        <p>Designed for robustness, speed, and no surprises.</p>
+                    </div>
+
+                    <div class="grid">
+                        <div class="card">
+                            <div class="icon">⚡</div>
+                            <h3>Blazing Fast & Native</h3>
+                            <p>
+                                Written in <strong>Nim</strong> for maximum
+                                performance. Compiles to a single static binary
+                                with zero dependencies. No Python, no Ruby, no
+                                bloat.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <div class="icon">🔄</div>
+                            <h3>Smart Sync</h3>
+                            <p>
+                                Automatically detects conflicts. Safely validate
+                                your existing configuration files before linking
+                                anything to avoid data loss.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <div class="icon">📦</div>
+                            <h3>Multi-profile</h3>
+                            <p>
+                                Easily manage different configurations for work
+                                and personal machines from a single repository.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="install" class="install">
+                <div class="container install-container">
+                    <h2>Install in seconds</h2>
+                    <p style="color: var(--text-secondary); margin-top: 16px">
+                        Available for Linux.
+                    </p>
+
+                    <div class="install-box">
+                        <span class="prefix">$</span>
+                        <span class="command"
+                            >curl -sL gabrielcapilla.github.io/install | sh
+                            dotman</span
+                        >
+                    </div>
+
+                    <div class="nimble-option">
+                        <span>Prefer Nimble?</span>
+                        <code class="nimble-cmd">nimble install dotman</code>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>
+                    &copy; 2026 Dotman. Open Source under MIT License.
+                    <br />
+                    Designed with
+                    <span style="color: var(--accent)">♥</span> for the
+                    terminal.
+                </p>
+            </div>
+        </footer>
+
+        <script type="module" src="/index.tsx"></script>
+    </body>
+</html>
