@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+declare -r RAW_URL="https://raw.githubusercontent.com/gabrielcapilla"
+declare -r DEFAULT_BRANCH="main"
+declare -r DEFAULT_SCRIPT="install.sh"
+
+function show_usage() {
+    echo "Usage: curl -fsSL https://gabrielcapilla.github.io/install | bash -s <repo-name>[/<script-file>]" >&2
+    echo "" >&2
+    echo "Examples:" >&2
+    echo "  bash -s resolve-lib-patch                  # Uses install.sh" >&2
+    echo "  bash -s resolve-lib-patch/patch.sh         # Specific script" >&2
+    echo "  bash -s resolve-lib-patch -- --revert     # Pass args to script" >&2
+    echo "" >&2
+    echo "Default script: install.sh (must exist in main/ branch)" >&2
+    exit 1
+}
+
+if [[ $# -eq 0 ]]; then
+    echo "Error: Repository name required" >&2
+    show_usage
+fi
+
+REPO_PATH="${1}"
+shift
+EXTRA_ARGS=("$@")
+
+declare -r REPO_NAME="${REPO_PATH%%/*}"
+declare -r SCRIPT_NAME="${REPO_PATH##*/}"
+
+declare SCRIPT_URL
+if [[ "${REPO_PATH}" == */* ]]; then
+    SCRIPT_URL="${RAW_URL}/${REPO_NAME}/${DEFAULT_BRANCH}/${SCRIPT_NAME}"
+else
+    SCRIPT_URL="${RAW_URL}/${REPO_NAME}/${DEFAULT_BRANCH}/${DEFAULT_SCRIPT}"
+fi
+
+echo "Downloading: ${SCRIPT_URL}" >&2
+echo "Repository: ${REPO_NAME}" >&2
+echo "Script: ${SCRIPT_NAME:-${DEFAULT_SCRIPT}}" >&2
+echo "" >&2
+
+if ! curl -fsSL "${SCRIPT_URL}" | bash -s -- "${EXTRA_ARGS[@]}"; then
+    if [[ "${REPO_PATH}" != */* ]]; then
+        echo "" >&2
+        echo "Error: Default script '${DEFAULT_SCRIPT}' not found in ${REPO_NAME}" >&2
+        echo "" >&2
+        echo "Solutions:" >&2
+        echo "  1. Add an 'install.sh' script to your repository (recommended)" >&2
+        echo "  2. Specify the script name explicitly:" >&2
+        echo "     curl ... | bash -s ${REPO_NAME}/<your-script-name>" >&2
+    else
+        echo "" >&2
+        echo "Error: Script '${SCRIPT_NAME}' not found in ${REPO_NAME}" >&2
+    fi
+    exit 1
+fi
