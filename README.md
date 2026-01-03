@@ -6,28 +6,37 @@ Elegant way to execute remote bash scripts from GitHub repositories without clon
 
 ```bash
 # Install using default script (install.sh)
-curl -fsSL https://gabrielcapilla.github.io/install | bash -s <repo-name>
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- <repo-name>
 
 # Install specific script
-curl -fsSL https://gabrielcapilla.github.io/install | bash -s <repo-name>/<script-file>
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- <repo-name>/<script-file>
+
+# Preview script before executing
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- --preview <repo-name>
 ```
+
+**Note:** Always use `--` after `bash -s` to properly separate bash options from script arguments.
 
 ## Examples
 
 ```bash
 # Install resolve-lib-patch (uses install.sh if it exists)
-curl -fsSL https://gabrielcapilla.github.io/install | bash -s resolve-lib-patch
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- resolve-lib-patch
 
 # Install with specific script
-curl -fsSL https://gabrielcapilla.github.io/install | bash -s resolve-lib-patch/patch.sh
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- resolve-lib-patch/patch.sh
+
+# Preview script before executing
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- --preview resolve-lib-patch
 
 # Install with revert flag
-curl -fsSL https://gabrielcapilla.github.io/install | bash -s resolve-lib-patch -- --revert
+curl -fsSL https://gabrielcapilla.github.io/install | bash -s -- resolve-lib-patch -- --revert
 ```
 
 ## How it Works
 
 The `install` script acts as a router:
+
 1. Receives repository name as parameter
 2. Tries to download `install.sh` by default
 3. Or downloads the specific script you specify
@@ -42,6 +51,7 @@ For automatic installation without specifying script name:
 3. Users can install with: `curl .../install | bash -s <repo-name>`
 
 For custom script names, users specify explicitly:
+
 ```bash
 curl .../install | bash -s <repo-name>/<your-script-name>
 ```
