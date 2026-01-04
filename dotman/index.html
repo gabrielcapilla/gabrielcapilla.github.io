@@ -3,17 +3,8 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="color-scheme" content="dark light" />
-        <meta
-            name="theme-color"
-            content="#100F0F"
-            media="(prefers-color-scheme: dark)"
-        />
-        <meta
-            name="theme-color"
-            content="#FFFCF0"
-            media="(prefers-color-scheme: light)"
-        />
+        <meta name="color-scheme" content="dark" />
+        <meta name="theme-color" content="#10151d" />
         <title>dotman | The modern dotfiles manager</title>
         <!-- Inter for UI text, JetBrains Mono for Code -->
         <link
@@ -32,11 +23,6 @@
                     <a href="docs.html" style="color: var(--text-primary)"
                         >Docs</a
                     >
-                    <a
-                        href="https://github.com/gabrielcapilla/dotman.git"
-                        target="_blank"
-                        >GitHub</a
-                    >
                 </nav>
             </div>
         </header>
@@ -44,6 +30,7 @@
         <main>
             <section class="hero">
                 <div class="container">
+                    <!--<h1><span>Dotfiles simplified</span></h1>-->
                     <h1>Dotfiles simplified</h1>
                     <p>
                         Stop fighting with broken symlinks. Dotman just works.
@@ -59,6 +46,7 @@
                         >
                     </div>
 
+                    <div class="cyber-pattern"></div>
                     <div class="terminal-window">
                         <div class="terminal-header">
                             <span class="terminal-title">dotman</span>
@@ -190,15 +178,40 @@
                         Available for Linux.
                     </p>
 
-                    <div class="install-box">
+                    <div class="install-box" onclick="copyInstallCommand()">
                         <span class="prefix">$</span>
-                        <span class="command"
-                            >curl -sL gabrielcapilla.github.io/install | sh
-                            dotman</span
+                        <span class="shell-command">curl</span>
+                        <span class="shell-argument">-sL</span>
+                        <span class="shell-string"
+                            >gabrielcapilla.github.io/install</span
                         >
+                        <span class="shell-operator">|</span>
+                        <span class="shell-command">sh</span>
+                        <span class="shell-argument">-s</span>
+                        <span class="shell-argument">dotman</span>
                     </div>
 
-                    <div class="nimble-option">
+                    <div
+                        class="install-box-mobile"
+                        onclick="copyInstallCommand()"
+                    >
+                        <div class="command-line">
+                            <span class="shell-command">curl</span>
+                            <span class="shell-argument">-sL</span>
+                            <span class="shell-string"
+                                >gabrielcapilla.github.io/install</span
+                            >
+                            <span class="shell-operator">|</span>
+                            <span class="shell-command">sh</span>
+                            <span class="shell-argument">-s</span>
+                            <span class="shell-argument">dotman</span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="nimble-option"
+                        onclick="copyNimbleCommand(event)"
+                    >
                         <span>Prefer Nimble?</span>
                         <code class="nimble-cmd">nimble install dotman</code>
                     </div>
@@ -219,5 +232,49 @@
         </footer>
 
         <script type="module" src="/index.tsx"></script>
+        <script>
+            async function copyInstallCommand() {
+                const command =
+                    "curl -sL gabrielcapilla.github.io/install | sh -s dotman";
+                try {
+                    await navigator.clipboard.writeText(command);
+                    showToast("Copied to clipboard!");
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            }
+
+            async function copyNimbleCommand(event) {
+                event.stopPropagation();
+                const command = "nimble install dotman";
+                try {
+                    await navigator.clipboard.writeText(command);
+                    showToast("Copied to clipboard!");
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            }
+
+            function showToast(message) {
+                const existingToast = document.querySelector(".toast");
+                if (existingToast) {
+                    existingToast.remove();
+                }
+
+                const toast = document.createElement("div");
+                toast.className = "toast";
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                setTimeout(() => {
+                    toast.style.opacity = "1";
+                }, 10);
+
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            }
+        </script>
     </body>
 </html>
