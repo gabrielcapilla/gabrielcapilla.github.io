@@ -59,10 +59,8 @@
 
                     <h4>Advanced</h4>
                     <ul>
-                        <li><a href="#design">Design Principles</a></li>
                         <li><a href="#tips">Tips & Best Practices</a></li>
                         <li><a href="#examples">Examples</a></li>
-                        <li><a href="#migration">Migration</a></li>
                     </ul>
                 </aside>
 
@@ -71,22 +69,45 @@
                     <p>
                         Welcome to the official documentation for
                         <strong>dotman</strong>. Dotman is a high-performance
-                        dotfiles manager written in Nim, designed with Data
-                        Oriented Design principles for maximum efficiency.
+                        dotfiles manager written in Nim.
                     </p>
                     <p>
-                        Unlike GNU Stow or other dotfile managers, dotman
-                        features multi-profile support, automatic conflict
-                        detection, and a zero-configuration approach. It works
-                        seamlessly on Linux, macOS, BSD, and Windows.
+                        Dotman features multi-profile support, automatic
+                        conflict detection, and a zero-configuration approach.
+                        It works seamlessly on Linux.
                     </p>
 
                     <h2 id="installation">Installation</h2>
                     <p>
                         Dotman is built with Nim and can be installed via
-                        several methods. It works on Linux, macOS, BSD, and
-                        Windows.
+                        several methods.
                     </p>
+
+                    <h3>Install the binary (fastest method)</h3>
+                    <div class="code-block">
+                        <code>
+                            <span class="token-cmd">curl</span>
+                            <span class="token-arg"
+                                >-fsSL gabrielcapilla.github.io/install | bash
+                                -s dotman</span
+                            >
+                        </code>
+                    </div>
+
+                    <h3>Install via Nimble</h3>
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Nim 2.2.6 or later</li>
+                    </ul>
+                    <div class="code-block">
+                        <code>
+                            <span class="token-cmd">nimble</span>
+                            <span class="token-arg"
+                                >install
+                                https://github.com/gabrielcapilla/dotman.git@#head</span
+                            >
+                        </code>
+                    </div>
 
                     <h3>Install from Source</h3>
                     <p>Clone the repository and build the binary:</p>
@@ -95,46 +116,14 @@
                             <span class="token-cmd">git</span>
                             <span class="token-arg"
                                 >clone
-                                https://github.com/yourusername/dotman.git</span
-                            ><br />
+                                https://github.com/gabrielcapilla/dotman.git</span
+                            ><br /><br />
                             <span class="token-cmd">cd</span>
-                            <span class="token-arg">dotman</span><br />
+                            <span class="token-arg">dotman</span><br /><br />
                             <span class="token-cmd">nimble</span>
-                            <span class="token-arg">build</span><br />
+                            <span class="token-arg">build</span><br /><br />
                             <span class="token-cmd">nimble</span>
                             <span class="token-arg">install</span>
-                        </code>
-                    </div>
-
-                    <h3>Install via Nimble</h3>
-                    <p>If you have Nim installed:</p>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-cmd">nimble</span>
-                            <span class="token-arg">install dotman</span>
-                        </code>
-                    </div>
-
-                    <h3>Install via AUR (Coming Soon)</h3>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-cmd">paru</span>
-                            <span class="token-arg">-S dotman</span>
-                        </code>
-                    </div>
-
-                    <p><strong>Requirements:</strong></p>
-                    <ul>
-                        <li>Nim 2.x or later</li>
-                        <li>GCC or Clang (for compilation from source)</li>
-                    </ul>
-
-                    <h3>Via Nimble</h3>
-                    <p>If you have the Nim compiler installed:</p>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-cmd">nimble</span>
-                            <span class="token-arg">install dotman</span>
                         </code>
                     </div>
 
@@ -147,34 +136,18 @@
                     <div class="code-block">
                         <code>
                             <span class="token-comment"
-                                ># Initialize dotman (creates ~/.dotfiles)</span
+                                ># Initialize dotman (creates
+                                ~/.dotfiles/main)</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">init</span><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Create the main profile (if not already
-                                created)</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">make main</span><br />
-                            <br />
+                            <span class="token-arg">init</span><br /><br />
                             <span class="token-comment"
                                 ># Add your nvim config (moves file and creates
                                 symlink)</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg">set ~/.config/nvim</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Add your fish shell config</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg"
-                                >set ~/.config/fish/config.fish</span
-                            ><br />
-                            <br />
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Check status of your configs</span
                             ><br />
@@ -217,47 +190,37 @@
 
                     <div class="code-block">
                         <code>
+                            <span class="shell-path">home/</span>
+                            <span class="shell-operator">→</span> ~/<br />
                             <span class="shell-path">config/</span>
                             <span class="shell-operator">→</span>
                             ~/.config/<br />
-                            <span class="shell-path">share/</span>
-                            <span class="shell-operator">→</span>
-                            ~/.local/share/<br />
-                            <span class="shell-path">home/</span>
-                            <span class="shell-operator">→</span> ~/<br />
-                            <span class="shell-path">local/</span>
-                            <span class="shell-operator">→</span>
-                            ~/.local/<br />
                             <span class="shell-path">bin/</span>
                             <span class="shell-operator">→</span>
                             ~/.local/bin/<br />
+                            <span class="shell-path">share/</span>
+                            <span class="shell-operator">→</span>
+                            ~/.local/share/<br />
                         </code>
                     </div>
 
                     <p>
-                        When adding files, dotman automatically places them in
-                        the correct category. For example:
+                        When adding files, dotman automatically links them in
+                        the correct path. For example:
                     </p>
 
                     <div class="code-block">
                         <code>
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add ~/.config/nvim</span>
                             <span class="token-comment"
-                                ># Stored in config/</span
+                                ># config/nvim → ~/.config/nvim</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add ~/.bashrc</span>
+                            <span class="token-arg">add nvim</span><br /><br />
                             <span class="token-comment"
-                                ># Stored in home/ (as bashrc)</span
+                                ># share/fonts → ~/.local/share/fonts</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg"
-                                >add ~/.local/share/fonts</span
-                            >
-                            <span class="token-comment"
-                                ># Stored in share/</span
-                            >
+                            <span class="token-arg">add fonts</span>
                         </code>
                     </div>
 
@@ -289,10 +252,10 @@
                     <h2 id="profiles">Profiles</h2>
                     <p>
                         Profiles allow you to manage different configurations
-                        for different environments (e.g., <code>work</code>,
-                        <code>personal</code>, <code>main</code>). The
-                        <code>main</code> profile is created by default and
-                        cannot be deleted.
+                        for different environments (e.g.,
+                        <code>experimental</code>, <code>laptop</code>,
+                        <code>main</code>). The <code>main</code> profile is
+                        created by default and cannot be deleted.
                     </p>
 
                     <div class="code-block">
@@ -301,26 +264,28 @@
                                 ># Create a new profile</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">make work</span><br />
-                            <br />
+                            <span class="token-arg">make experimental</span
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Clone an existing profile</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">clone main personal</span
-                            ><br />
-                            <br />
+                            <span class="token-arg">clone main laptop</span
+                            ><br /><br />
                             <span class="token-comment"
                                 ># List all profiles</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">list</span><br />
-                            <br />
+                            <span class="token-arg">list</span><br /><br />
+                            <span class="token-comment"># Delete a profile</span
+                            ><br />
                             <span class="token-comment"
-                                ># Delete a profile (not main)</span
+                                ># Note: `main` profile cannot be deleted</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">--delete-profile work</span>
+                            <span class="token-arg"
+                                >--delete-profile experimental</span
+                            >
                         </code>
                     </div>
 
@@ -487,7 +452,8 @@
 
                     <h3>status</h3>
                     <p>
-                        Display the status of all files in the current profile.
+                        Display the status of all files in the current main
+                        profile.
                     </p>
                     <div class="code-block">
                         <code>
@@ -549,9 +515,9 @@
 
                     <h3>push</h3>
                     <p>
-                        Copy files from the system to the profile. Use this when
-                        you've manually edited a configuration file and want to
-                        update the profile.
+                        Link all files from the profile to the system. Use it
+                        when you want to apply all of your profile settings.
+                        Similar to the <code>add</code> command but in bulk.
                     </p>
                     <div class="code-block">
                         <code>
@@ -561,11 +527,7 @@
                     </div>
 
                     <h3>pull</h3>
-                    <p>
-                        Update files on the system from the profile. Use this
-                        when you've edited files in the profile directly (e.g.,
-                        via Git).
-                    </p>
+                    <p>Remove all symbolic links from the selected profile.</p>
                     <div class="code-block">
                         <code>
                             <span class="token-cmd">dotman</span>
@@ -577,8 +539,8 @@
 
                     <ul>
                         <li>
-                            <code>--profile &lt;name&gt;</code> - Set active
-                            profile (default: main)
+                            <code>--profile &lt;name&gt;</code> - Select the
+                            profile
                         </li>
                         <li>
                             <code>--delete-profile &lt;name&gt;</code> - Delete
@@ -590,42 +552,6 @@
                             information
                         </li>
                     </ul>
-
-                    <h2 id="design">Design Principles</h2>
-                    <p>
-                        Dotman is built with
-                        <strong>Data Oriented Design (DOD)</strong>
-                        principles for maximum performance:
-                    </p>
-
-                    <ul>
-                        <li>
-                            <strong>Data > Code</strong> - Data structures are
-                            designed first for hardware efficiency
-                        </li>
-                        <li>
-                            <strong>SoA over AoS</strong> - Structure of Arrays
-                            preferred for SIMD-friendly memory layout
-                        </li>
-                        <li>
-                            <strong>Batch Processing</strong> - Functions
-                            operate on collections, not individual elements
-                        </li>
-                        <li>
-                            <strong>Predictable Memory</strong> - Minimal GC
-                            allocations, pre-allocated buffers
-                        </li>
-                        <li>
-                            <strong>Pure Functions</strong> - Functions without
-                            side effects where possible
-                        </li>
-                    </ul>
-
-                    <p>
-                        This architecture ensures
-                        <strong>optimal CPU cache utilization</strong> and fast
-                        operations even with thousands of configuration files.
-                    </p>
 
                     <h2 id="tips">Tips & Best Practices</h2>
 
@@ -645,13 +571,7 @@
                             <span class="token-cmd">git</span>
                             <span class="token-arg"
                                 >commit -m "Initial commit"</span
-                            ><br />
-                            <span class="token-cmd">git</span>
-                            <span class="token-arg"
-                                >remote add origin &lt;your-repo-url&gt;</span
-                            ><br />
-                            <span class="token-cmd">git</span>
-                            <span class="token-arg">push -u origin main</span>
+                            >
                         </code>
                     </div>
 
@@ -683,31 +603,53 @@
                             across all machines
                         </li>
                         <li>
-                            <code>work</code> - Work-specific configurations
-                            (Git config, SSH keys, etc.)
+                            <code>experimental</code> - Test new configurations
+                            without breaking your main setup
                         </li>
-                        <li><code>personal</code> - Personal configurations</li>
                         <li>
-                            <code>server</code> - Server-specific configurations
+                            <code>laptop</code> - Your laptop has different
+                            hardware; your configuration is different from the
+                            main one
                         </li>
                     </ul>
 
-                    <h3>Sync Workflows</h3>
+                    <h3>Push/Pull Workflows</h3>
                     <p>
-                        Use <code>push</code> and <code>pull</code> commands to
-                        keep your system and profiles in sync:
+                        Using the <code>push</code> and <code>pull</code>
+                        commands allows you to quickly switch between different
+                        configurations.
                     </p>
-                    <ul>
-                        <li>
-                            <strong>push</strong> - After manually editing a
-                            config file on your system, push changes back to the
-                            profile
-                        </li>
-                        <li>
-                            <strong>pull</strong> - After pulling changes from
-                            Git, update your system from the profile
-                        </li>
-                    </ul>
+                    <p>
+                        Imagine you are testing an experimental configuration.
+                    </p>
+                    <div class="code-block">
+                        <code>
+                            <span class="token-comment"
+                                ># Clone your main profile and create an
+                                experimental profile</span
+                            ><br />
+                            <span class="token-cmd">dotman</span>
+                            <span class="token-arg"
+                                >clone main experimental</span
+                            ><br /><br />
+                            <span class="token-comment"
+                                ># Remove all symbolic links from the main
+                                profile</span
+                            ><br />
+                            <span class="token-cmd">dotman</span>
+                            <span class="token-arg">pull main</span><br /><br />
+                            <span class="token-comment"
+                                ># Link all files from the experimental profile
+                                to the system</span
+                            ><br />
+                            <span class="token-cmd">dotman</span>
+                            <span class="token-arg">push experimental</span>
+                        </code>
+                    </div>
+                    <p>
+                        Now, you can modify and test new configurations without
+                        affecting your main profile's configuration.
+                    </p>
 
                     <h2 id="examples">Examples</h2>
 
@@ -720,16 +662,14 @@
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg">set ~/.config/nvim</span
-                            ><br />
-                            <br />
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Check status of config category</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg"
                                 >status --category config</span
-                            ><br />
-                            <br />
+                            ><br /><br />
                             <span class="token-comment"
                                 ># View detailed breakdown by subdirectory</span
                             ><br />
@@ -738,58 +678,29 @@
                         </code>
                     </div>
 
-                    <h3>Font Management</h3>
-                    <p>Sync your fonts across multiple machines:</p>
+                    <h3>Theme Management</h3>
+                    <p>Sync your themes across multiple machines:</p>
                     <div class="code-block">
                         <code>
                             <span class="token-comment"
-                                ># Add fonts directory to profile</span
+                                ># Add color-schemes directory to profile</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg"
-                                >set ~/.local/share/fonts/Monaspace</span
-                            ><br />
-                            <br />
+                                >set ~/.local/share/color-schemes</span
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Check status with filters</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg"
                                 >status --category share --linked</span
-                            ><br />
-                            <br />
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Check for any conflicts</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg">status --conflicts</span>
-                        </code>
-                    </div>
-
-                    <h3>Fish Shell Setup</h3>
-                    <p>Set up your Fish shell environment:</p>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-comment"
-                                ># Add fish configuration files to profile</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg"
-                                >set ~/.config/fish/config.fish</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg"
-                                >set ~/.config/fish/functions.fish</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Verify all fish files are properly
-                                linked</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg"
-                                >status --category config --verbose</span
-                            >
                         </code>
                     </div>
 
@@ -805,144 +716,43 @@
                                 environments</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">make work</span><br />
+                            <span class="token-arg">make exp</span><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">make personal</span><br />
-                            <br />
+                            <span class="token-arg">make laptop</span
+                            ><br /><br />
                             <span class="token-comment"
-                                ># Add work-specific config to work
-                                profile</span
+                                ># Add experimental-specific config to
+                                experimental profile</span
                             ><br />
                             <span class="token-cmd">dotman</span>
                             <span class="token-arg"
-                                >--profile work set ~/.config/git/config</span
-                            ><br />
-                            <br />
+                                >--profile exp set ~/.config/alacritty</span
+                            ><br /><br />
                             <span class="token-comment"
                                 ># List all profiles</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">list</span><br />
-                            <br />
+                            <span class="token-arg">list</span><br /><br />
                             <span class="token-comment"
-                                ># Check work profile status</span
+                                ># Check experimental profile status</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">status --profile work</span
+                            <span class="token-arg">status --profile exp</span
+                            ><br /><br />
+                            <span class="token-comment"
+                                ># Remove a symlink and restore the original
+                                file or directory</span
                             ><br />
-                            <br />
+                            <span class="token-cmd">dotman</span>
+                            <span class="token-arg"
+                                >--profile exp unset alacritty</span
+                            ><br /><br />
                             <span class="token-comment"
                                 ># Delete a profile (main cannot be
                                 deleted)</span
                             ><br />
                             <span class="token-cmd">dotman</span>
-                            <span class="token-arg">--delete-profile work</span>
-                        </code>
-                    </div>
-
-                    <h2 id="migration">Migration from Other Managers</h2>
-
-                    <h3>From GNU Stow</h3>
-                    <p>
-                        To migrate from Stow, first remove existing symlinks,
-                        then move your dotfiles to the dotman structure:
-                    </p>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-comment"
-                                ># Remove Stow symlinks</span
-                            ><br />
-                            <span class="token-cmd">stow</span>
-                            <span class="token-arg">-t $HOME --delete *</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Initialize dotman</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">init</span><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Move your stow directory contents</span
-                            ><br />
-                            <span class="token-cmd">mv</span>
-                            <span class="token-arg"
-                                >~/dotfiles/* ~/.dotfiles/main/</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Re-link with dotman</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add</span>
-                        </code>
-                    </div>
-
-                    <h3>From yadm</h3>
-                    <p>
-                        Dotman can read yadm-style repositories. Simply move
-                        your yadm repository to <code>~/.dotfiles</code> and
-                        adjust the structure to match dotman's category-based
-                        organization.
-                    </p>
-
-                    <h3>Manual Setup</h3>
-                    <p>
-                        If you're coming from another dotfile manager or
-                        starting fresh, you can manually organize your files
-                        into dotman's structure:
-                    </p>
-                    <div class="code-block">
-                        <code>
-                            <span class="token-comment"
-                                ># Initialize dotman</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">init</span><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Manually organize files by category</span
-                            ><br />
-                            <span class="token-cmd">mkdir</span>
-                            <span class="token-arg"
-                                >~/.dotfiles/main/config</span
-                            ><br />
-                            <span class="token-cmd">mkdir</span>
-                            <span class="token-arg">~/.dotfiles/main/share</span
-                            ><br />
-                            <span class="token-cmd">mkdir</span>
-                            <span class="token-arg">~/.dotfiles/main/home</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Copy your config files to appropriate
-                                categories</span
-                            ><br />
-                            <span class="token-cmd">cp</span>
-                            <span class="token-arg"
-                                >-r ~/.config/nvim
-                                ~/.dotfiles/main/config/</span
-                            ><br />
-                            <span class="token-cmd">cp</span>
-                            <span class="token-arg"
-                                >-r ~/.local/share/fonts
-                                ~/.dotfiles/main/share/</span
-                            ><br />
-                            <span class="token-cmd">cp</span>
-                            <span class="token-arg"
-                                >~/.bashrc ~/.dotfiles/main/home/</span
-                            ><br />
-                            <br />
-                            <span class="token-comment"
-                                ># Create symlinks for all files in
-                                profile</span
-                            ><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add nvim</span><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add fonts</span><br />
-                            <span class="token-cmd">dotman</span>
-                            <span class="token-arg">add bashrc</span>
+                            <span class="token-arg">--delete-profile exp</span>
                         </code>
                     </div>
                 </article>
@@ -954,5 +764,140 @@
                 <p>&copy; 2026 Dotman CLI. Open Source under MIT License.</p>
             </div>
         </footer>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const codeBlocks = document.querySelectorAll(".code-block");
+
+                codeBlocks.forEach((block) => {
+                    const code = block.querySelector("code");
+                    if (!code) return;
+
+                    const rawHTML = code.innerHTML;
+                    const lines = rawHTML.split(/<br\s*\/?>/i);
+                    const lineWrappers = [];
+
+                    lines.forEach((line) => {
+                        const trimmed = line.trim();
+                        if (!trimmed) return;
+
+                        const div = document.createElement("div");
+                        div.className = "code-line";
+                        div.innerHTML = trimmed;
+
+                        const tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = trimmed;
+
+                        // Intelligent extraction: Remove comments
+                        const comments = tempDiv.querySelectorAll(
+                            ".token-comment, .shell-comment",
+                        );
+                        comments.forEach((c) => c.remove());
+
+                        // Get text content (includes text nodes between spans)
+                        let commandText = tempDiv.textContent || "";
+                        // Normalize whitespace
+                        commandText = commandText.replace(/\s+/g, " ").trim();
+
+                        div.dataset.command = commandText;
+
+                        if (!commandText) {
+                            div.classList.add("non-copyable");
+                        } else {
+                            div.title = "Click to copy this command";
+                        }
+
+                        lineWrappers.push(div);
+                    });
+
+                    if (lineWrappers.length > 0) {
+                        code.innerHTML = "";
+                        lineWrappers.forEach((wrapper) => {
+                            code.appendChild(wrapper);
+                        });
+
+                        block.addEventListener("click", function (e) {
+                            const targetLine = e.target.closest(".code-line");
+
+                            // If clicked on a specific line
+                            if (targetLine) {
+                                if (
+                                    targetLine.classList.contains(
+                                        "non-copyable",
+                                    )
+                                ) {
+                                    return; // Do nothing for comments
+                                }
+                                const commandText =
+                                    targetLine.dataset.command || "";
+                                if (commandText) {
+                                    copyToClipboard(commandText);
+                                }
+                            } else {
+                                // If clicked on the block padding (copy all executable commands)
+                                const allCommands = Array.from(
+                                    code.querySelectorAll(".code-line"),
+                                )
+                                    .map(
+                                        (wrapper) =>
+                                            wrapper.dataset.command || "",
+                                    )
+                                    .filter((text) => text)
+                                    .join("\n");
+                                if (allCommands) {
+                                    copyToClipboard(allCommands);
+                                }
+                            }
+                        });
+
+                        const hasCopyable = lineWrappers.some(
+                            (l) => !l.classList.contains("non-copyable"),
+                        );
+                        if (hasCopyable) {
+                            block.title =
+                                "Click to copy all commands, or click a line to copy just that command";
+                            block.style.cursor = "pointer";
+                        } else {
+                            block.style.cursor = "default";
+                        }
+                    }
+                });
+
+                async function copyToClipboard(text) {
+                    if (!text) return;
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        const display =
+                            text.length > 30
+                                ? text.substring(0, 30) + "..."
+                                : text;
+                        showToast("Copied: " + display);
+                    } catch (err) {
+                        console.error("Failed to copy:", err);
+                    }
+                }
+
+                function showToast(message) {
+                    const existingToast = document.querySelector(".toast");
+                    if (existingToast) {
+                        existingToast.remove();
+                    }
+
+                    const toast = document.createElement("div");
+                    toast.className = "toast";
+                    toast.textContent = message;
+                    document.body.appendChild(toast);
+
+                    setTimeout(() => {
+                        toast.style.opacity = "1";
+                    }, 10);
+
+                    setTimeout(() => {
+                        toast.style.opacity = "0";
+                        setTimeout(() => toast.remove(), 300);
+                    }, 2000);
+                }
+            });
+        </script>
     </body>
 </html>

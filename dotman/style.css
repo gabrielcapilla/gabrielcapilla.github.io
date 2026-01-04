@@ -873,9 +873,32 @@ article li {
     font-size: 0.9rem;
     position: relative;
     overflow-x: auto;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+.code-block:hover {
+    border-color: var(--border-hover);
 }
 .code-block code {
     color: var(--text-primary);
+}
+.code-line {
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.15s;
+    display: block;
+    white-space: nowrap;
+    overflow-x: auto;
+    cursor: pointer;
+}
+.code-line:hover {
+    background: var(--surface-hover);
+}
+.code-line.non-copyable {
+    cursor: default;
+}
+.code-line.non-copyable:hover {
+    background: transparent;
 }
 .token-cmd {
     color: var(--token-cmd);
