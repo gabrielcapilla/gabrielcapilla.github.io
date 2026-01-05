@@ -246,7 +246,8 @@
 
             async function copyNimbleCommand(event) {
                 event.stopPropagation();
-                const command = "nimble install dotman";
+                const command =
+                    "nimble install https://github.com/gabrielcapilla/dotman.git@#head";
                 try {
                     await navigator.clipboard.writeText(command);
                     showToast("Copied to clipboard!");
