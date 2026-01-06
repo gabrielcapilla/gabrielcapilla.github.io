@@ -341,6 +341,12 @@ footer a {
         20px 20px,
         20px 20px;
     animation: cyber-move 10s linear infinite;
+    will-change: background-position;
+}
+@media (prefers-reduced-motion: reduce) {
+    .cyber-pattern {
+        animation: none;
+    }
 }
 @keyframes cyber-move {
     0% {
