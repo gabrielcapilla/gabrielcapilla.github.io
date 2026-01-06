@@ -9,15 +9,72 @@
             name="description"
             content="Dotman is a high-performance, zero-dependency dotfiles manager for Linux. Simplifies configuration management with multi-profile support and smart conflict detection."
         />
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://gabrielcapilla.github.io/dotman/" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://gabrielcapilla.github.io/dotman/" />
+        <meta property="og:title" content="Dotman - The High-Performance Dotfiles Manager" />
+        <meta property="og:description" content="Manage your Linux configuration files with zero dependencies. The faster, smarter alternative to GNU Stow written in Nim." />
+        <meta property="og:image" content="https://gabrielcapilla.github.io/dotman/assets/dotman-social-card.png" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://gabrielcapilla.github.io/dotman/" />
+        <meta property="twitter:title" content="Dotman - The High-Performance Dotfiles Manager" />
+        <meta property="twitter:description" content="Manage your Linux configuration files with zero dependencies. The faster, smarter alternative to GNU Stow written in Nim." />
+        <meta property="twitter:image" content="https://gabrielcapilla.github.io/dotman/assets/dotman-social-card.png" />
+
         <title>dotman | The modern dotfiles manager</title>
+        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <!-- Inter for UI text, JetBrains Mono for Code -->
+        
+        <!-- Optimized Font Loading: Preload + Swap -->
+        <link 
+            rel="preload" 
+            as="style" 
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" 
+        />
         <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
             rel="stylesheet"
+            media="print"
+            onload="this.media='all'"
         />
+        <noscript>
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+                rel="stylesheet"
+            />
+        </noscript>
+
         <link rel="stylesheet" href="style.css" />
+
+        <!-- Structured Data (JSON-LD) -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Dotman",
+          "operatingSystem": "Linux",
+          "applicationCategory": "DeveloperApplication",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "A high-performance, zero-dependency dotfiles manager written in Nim. Features multi-profile support and automatic conflict detection.",
+          "softwareRequirements": "Linux",
+          "author": {
+            "@type": "Person",
+            "name": "Gabriel Capilla"
+          },
+          "keywords": "dotfiles, manager, linux, nim, gnu stow, configuration"
+        }
+        </script>
     </head>
     <body>
         <header>
@@ -37,7 +94,7 @@
             <section class="hero">
                 <div class="container">
                     <!--<h1><span>Dotfiles simplified</span></h1>-->
-                    <h1>Dotfiles simplified</h1>
+                    <h1>Dotman: The Modern <span style="color: var(--accent)">Dotfiles Manager</span> for Linux</h1>
                     <p>
                         Stop fighting with broken symlinks. Dotman just works.
                     </p>
@@ -141,7 +198,7 @@
             <section id="features" class="features">
                 <div class="container">
                     <div class="section-title">
-                        <h2>Why use dotman?</h2>
+                        <h2>Why choose Dotman over GNU Stow?</h2>
                         <p>Designed for robustness, speed, and no surprises.</p>
                     </div>
 
@@ -160,9 +217,10 @@
                             <div class="icon">🔄</div>
                             <h3>Smart Sync</h3>
                             <p>
-                                Automatically detects conflicts. Safely validate
-                                your existing configuration files before linking
-                                anything to avoid data loss.
+                                A modern <strong>GNU Stow alternative</strong> that 
+                                automatically detects conflicts. Manage 
+                                <strong>Neovim</strong>, <strong>Zsh</strong>, and 
+                                <strong>Alacritty</strong> configs with zero dependencies.
                             </p>
                         </div>
                         <div class="card">
