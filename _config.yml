@@ -8,8 +8,8 @@ sass:
   style: compressed
   sass_dir: _sass
 
-plugins:
-  - jekyll-redirect-from
+# plugins:
+#   - jekyll-redirect-from
 
 collections:
   docs:

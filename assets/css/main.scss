@@ -1,11 +1,11 @@
 ---
 ---
 
-@import "variables";
-@import "base";
-@import "layout";
-@import "components";
-@import "home";
-@import "hub";
-@import "docs";
-@import "post";
+@use "base";
+@use "components";
+@use "docs";
+@use "home";
+@use "hub";
+@use "layout";
+@use "post";
+@use "variables";
