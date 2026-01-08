@@ -1,11 +1,11 @@
 ---
 ---
 
-@use "variables";
-@use "base";
-@use "layout";
-@use "components";
-@use "home";
-@use "hub";
-@use "docs";
-@use "post";
+@use "variables" as *;
+@use "base" as *;
+@use "layout" as *;
+@use "components" as *;
+@use "home" as *;
+@use "hub" as *;
+@use "docs" as *;
+@use "post" as *;
