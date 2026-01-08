@@ -1,5 +1,6 @@
-_site/
-.jekyll-cache/
-.sass-cache/
+_site
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
 Gemfile.lock
-dotman/docs.md
+TODO.md

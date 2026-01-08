@@ -1,1 +1,21 @@
-theme: minima
+title: Gabriel Capilla
+description: Open Source Enthusiast
+url: ""
+baseurl: ""
+theme: null
+
+sass:
+  style: compressed
+
+collections:
+  docs:
+    output: false
+    sort_by: order
+  projects:
+    output: true
+
+exclude:
+  - node_modules
+  - package.json
+  - package-lock.json
+  - .gitignore
