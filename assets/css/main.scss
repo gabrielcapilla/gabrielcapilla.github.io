@@ -1,11 +1,11 @@
 ---
 ---
 
-@import "variables" as *;
-@import "base" as *;
-@import "layout" as *;
-@import "components" as *;
-@import "home" as *;
-@import "hub" as *;
-@import "docs" as *;
-@import "post" as *;
+@use "variables" as *;
+@use "base" as *;
+@use "layout" as *;
+@use "components" as *;
+@use "home" as *;
+@use "hub" as *;
+@use "docs" as *;
+@use "post" as *;
