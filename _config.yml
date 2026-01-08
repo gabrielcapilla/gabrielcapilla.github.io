@@ -7,6 +7,9 @@ theme: null
 sass:
   style: compressed
 
+plugins:
+  - jekyll-redirect-from
+
 collections:
   docs:
     output: false
