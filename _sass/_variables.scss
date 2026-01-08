@@ -1,0 +1,33 @@
+:root {
+    /* Colors & Gradients */
+    --bg-dark: #0a0e17;
+    --text-white: #ffffff;
+    --text-muted: rgba(175, 190, 255, 0.8);
+    --text-muted-darker: rgba(175, 190, 255, 0.6);
+    --primary-blue: #152671;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    --sky-start: rgb(21, 38, 113);
+    --sky-mid: rgb(27, 44, 120);
+    --sky-end: #5669bd;
+    --sky-gradient: linear-gradient(
+        180deg,
+        var(--sky-start) 10%,
+        var(--sky-mid) 30%,
+        var(--sky-end) 100%
+    );
+
+    --header-gradient: linear-gradient(
+        180deg,
+        rgba(21, 38, 113, 1) 0%,
+        rgba(21, 38, 113, 0) 100%
+    );
+
+    /* Typography */
+    --font-sans: "Instrument Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* Layout */
+    --max-width: 1400px;
+    --content-width: 1024px;
+}

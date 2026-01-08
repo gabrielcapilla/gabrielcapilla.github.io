@@ -1,0 +1,233 @@
+.btn-primary {
+    background: white;
+    color: rgb(21, 38, 113);
+    padding: 0.875rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transition:
+        transform 0.2s,
+        background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #ebedff;
+    transform: scale(1.05);
+}
+
+/* Terminal */
+.terminal-wrapper {
+    width: 100%;
+    max-width: 56rem;
+    margin-top: 4rem;
+    padding: 0 1rem;
+}
+
+.terminal {
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    text-align: left;
+}
+
+.terminal-header {
+    background: #f3f4f6;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.window-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.dot.red {
+    background: #ff5f57;
+    border-color: #e0443e;
+}
+.dot.yellow {
+    background: #febc2e;
+    border-color: #d69e2a;
+}
+.dot.green {
+    background: #28c840;
+    border-color: #27ae37;
+}
+
+.terminal-title {
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-family: var(--font-sans);
+    font-weight: 500;
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    font-size: 0.875rem;
+    color: #1f2937;
+}
+
+.cmd-line {
+    margin-bottom: 1rem;
+}
+.cmd-prompt {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+.prompt-arrow {
+    color: #16a34a;
+    font-weight: bold;
+}
+.prompt-tilde {
+    color: #2563eb;
+    font-weight: bold;
+}
+.cmd-output {
+    padding-left: 1rem;
+    color: #6b7280;
+}
+.cursor {
+    display: inline-block;
+    width: 0.5rem;
+    height: 1.25rem;
+    background: #9ca3af;
+    animation: pulse 2s infinite;
+    vertical-align: middle;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Code Box Display (Install section) */
+.code-box-display {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    max-width: 48rem;
+    position: relative;
+}
+
+.code-box-display:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.code-content {
+    font-family: var(--font-mono);
+    text-align: left;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.yellow {
+    color: #facc15;
+}
+.gray {
+    color: #6b7280;
+}
+
+.copy-icon {
+    color: var(--text-muted);
+}
+.code-box-display:hover .copy-icon {
+    color: white;
+}
+
+/* Tooltip / Toast Notification */
+/* Re-styled to match the "Copied" toast from documentation */
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    color: var(--primary-blue);
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+/* Add check icon before text via CSS for tooltips */
+.tooltip::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23152671' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+.nimble-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(21, 38, 113, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-mono);
+    margin-left: 0.5rem;
+    cursor: pointer;
+    position: relative; /* Needed for absolute positioning of tooltip */
+}
+
+/* Icon Utils */
+.icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+.icon-lg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
