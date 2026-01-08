@@ -25,9 +25,8 @@ layout: default
         <div class="hidden-desktop mobile-toc">
             <h4>Jump to section:</h4>
             <div class="mobile-toc-links">
-                {% assign featured_sections = site.docs | where_exp: "item",
-                "item.order < 20 or item.order > 80" | sort: "order" %} {% for
-                item in featured_sections limit:6 %}
+                {% assign featured_sections = site.docs | sort: "order" | limit:6 %} {% for
+                item in featured_sections %}
                 <a href="#{{ item.slug }}" class="mobile-toc-link"
                     >{{ item.menu_title | default: item.title }}</a
                 >
