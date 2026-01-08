@@ -1,13 +1,12 @@
 title: Gabriel Capilla
 description: Open Source Enthusiast
-url: "https://gabrielcapilla.github.io"
+url: ""
 baseurl: ""
 theme: null
 
 sass:
   style: compressed
   sass_dir: _sass
-  implementation: sass-embedded
 
 plugins:
   - jekyll-redirect-from
