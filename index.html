@@ -31,11 +31,7 @@ context: hub
                 target="_blank"
                 class="hub-social-link"
             >
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path
-                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                    ></path>
-                </svg>
+                {% include components/icon.html name='github' %}
                 <span style="font-weight: 500">GitHub</span>
             </a>
             <div class="hub-social-divider"></div>
@@ -52,19 +48,10 @@ context: hub
     <!-- Projects Grid (Featured only) -->
     <section id="projects" class="hub-section">
         <h2 class="section-header">
-            <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                style="width: 14px; height: 14px"
-            >
-                <polyline points="4 17 10 11 4 5"></polyline>
-                <line x1="12" y1="19" x2="20" y2="19"></line>
-            </svg>
-            Selected Projects
+            {% include components/icon.html name='layers' %} Selected Projects
         </h2>
 
         <div class="projects-grid">
-            <!-- Project 1: Dotman (Active) -->
             <a
                 href="{{ '/projects/dotman/' | relative_url }}"
                 class="project-card featured"
@@ -86,15 +73,8 @@ context: hub
                     </div>
 
                     <div class="card-footer">
-                        View Project
-                        <svg
-                            class="icon"
-                            viewBox="0 0 24 24"
-                            style="width: 18px"
-                        >
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
+                        View Project {% include components/icon.html
+                        name='arrow-right' %}
                     </div>
                 </div>
             </a>
@@ -105,44 +85,8 @@ context: hub
                     <div>
                         <div class="card-header">
                             <div class="project-icon">
-                                <svg
-                                    class="icon"
-                                    viewBox="0 0 24 24"
-                                    style="width: 24px; height: 24px"
-                                >
-                                    <rect
-                                        x="4"
-                                        y="4"
-                                        width="16"
-                                        height="16"
-                                        rx="2"
-                                        ry="2"
-                                    ></rect>
-                                    <rect
-                                        x="9"
-                                        y="9"
-                                        width="6"
-                                        height="6"
-                                    ></rect>
-                                    <line x1="9" y1="1" x2="9" y2="4"></line>
-                                    <line x1="15" y1="1" x2="15" y2="4"></line>
-                                    <line x1="9" y1="20" x2="9" y2="23"></line>
-                                    <line
-                                        x1="15"
-                                        y1="20"
-                                        x2="15"
-                                        y2="23"
-                                    ></line>
-                                    <line x1="20" y1="9" x2="23" y2="9"></line>
-                                    <line
-                                        x1="20"
-                                        y1="14"
-                                        x2="23"
-                                        y2="14"
-                                    ></line>
-                                    <line x1="1" y1="9" x2="4" y2="9"></line>
-                                    <line x1="1" y1="14" x2="4" y2="14"></line>
-                                </svg>
+                                {% include components/icon.html name='package'
+                                %}
                             </div>
                         </div>
                         <h3 class="project-title" style="opacity: 0.8">
@@ -161,11 +105,8 @@ context: hub
 
         <div class="view-all-container">
             <a href="{{ '/projects/' | relative_url }}" class="view-all-link">
-                View all projects
-                <svg class="icon" viewBox="0 0 24 24">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
+                View all projects {% include components/icon.html
+                name='arrow-right' %}
             </a>
         </div>
     </section>
@@ -173,17 +114,7 @@ context: hub
     <!-- Articles Section (Recent only) -->
     <section id="writing" class="hub-section">
         <h2 class="section-header">
-            <svg
-                class="icon"
-                viewBox="0 0 24 24"
-                style="width: 14px; height: 14px"
-            >
-                <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                <path d="M2 2l7.586 7.586"></path>
-                <circle cx="11" cy="11" r="2"></circle>
-            </svg>
-            Recent Writing
+            {% include components/icon.html name='pen' %} Recent Writing
         </h2>
 
         <div class="articles-list">
@@ -195,15 +126,7 @@ context: hub
                 >
                 <span class="article-title">{{ post.title }}</span>
                 <div class="article-read">
-                    Read
-                    <svg
-                        class="icon"
-                        viewBox="0 0 24 24"
-                        style="width: 14px; height: 14px"
-                    >
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
+                    Read {% include components/icon.html name='arrow-right' %}
                 </div>
             </a>
             {% endfor %} {% if site.posts.size == 0 %}
@@ -216,11 +139,8 @@ context: hub
 
         <div class="view-all-container">
             <a href="{{ '/writing/' | relative_url }}" class="view-all-link">
-                Read all articles
-                <svg class="icon" viewBox="0 0 24 24">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
+                Read all articles {% include components/icon.html
+                name='arrow-right' %}
             </a>
         </div>
     </section>
