@@ -1,0 +1,56 @@
+<header class="navbar">
+    <nav class="nav-container">
+        {% assign menu_key = page.nav_menu | default: 'hub' %}
+        {% assign menu_items = site.data.navigation.menus[menu_key] %}
+
+        {% if menu_key == 'dotman' %}
+        <a href="{{ '/' | relative_url }}" class="logo-btn">
+            <span class="logo-text" style="font-family: var(--font-mono); font-weight: 700">~ dotman</span>
+            <span class="hidden-mobile" style="font-size: 0.875rem; color: var(--text-muted-darker); font-family: var(--font-mono); margin-left: 0.5rem; font-weight: 400">
+                / projects / dotman
+            </span>
+        </a>
+        {% else %}
+        <a href="{{ '/' | relative_url }}" class="logo-btn">
+            <span class="logo-text" style="font-family: var(--font-mono); font-weight: 700">~ gabrielcapilla</span>
+            {% if page.layout == 'post' %}
+            <span class="hidden-mobile" style="font-size: 0.875rem; color: var(--text-muted-darker); font-family: var(--font-mono); margin-left: 0.5rem; font-weight: 400">
+                / writing
+            </span>
+            {% endif %}
+        </a>
+        {% endif %}
+
+        <div class="hidden-mobile" style="gap: 1rem; align-items: center">
+            {% for link in menu_items %}
+            {% if link.icon and link.title == 'Back to Hub' %}
+                <a href="{{ link.url | relative_url }}" class="nav-link" style="color: var(--text-muted)">
+                    {{ link.title }}
+                </a>
+                <div style="width: 1px; height: 1rem; background: rgba(255, 255, 255, 0.2);"></div>
+            {% elsif link.icon and link.title != 'Back to Hub' %}
+                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url %}active{% endif %}">
+                    {% include components/icon.html name=link.icon %}
+                </a>
+            {% else %}
+                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url %}active{% endif %}">
+                    {{ link.title }}
+                </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </nav>
+</header>
+
+<div class="mobile-nav-wrapper hidden-desktop">
+    <nav class="mobile-nav">
+        {% assign mobile_menu_key = page.nav_menu | default: 'hub' %}
+        {% assign mobile_menu_items = site.data.navigation.mobile[mobile_menu_key] %}
+
+        {% for link in mobile_menu_items %}
+        <a href="{{ link.url | relative_url }}" class="{% if page.url == link.url %}active{% endif %}" aria-label="{{ link.title }}" {% if link.url contains 'http' %}target="_blank"{% endif %}>
+            {% include components/icon.html name=link.icon %}
+        </a>
+        {% endfor %}
+    </nav>
+</div>

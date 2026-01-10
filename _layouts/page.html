@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="hub-container">
+    <div style="margin-bottom: 4rem">
+        {% if page.back_link %} {% include components/back-link.html url="/"
+        text="Back to Hub" %} {% endif %}
+
+        <h1 class="hub-title" style="font-size: 3rem">{{ page.title }}</h1>
+
+        {% if page.description %}
+        <p class="hub-bio" style="font-size: 1.125rem">
+            {{ page.description }}
+        </p>
+        {% endif %}
+    </div>
+
+    {{ content }}
+</div>

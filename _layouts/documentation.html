@@ -3,54 +3,23 @@ layout: default
 ---
 
 <div class="docs-container">
-    <!-- Sidebar (Auto-generated) -->
-    <aside class="docs-sidebar">
-        {% assign categories = "Getting Started,Core Concepts,Commands,Advanced"
-        | split: "," %} {% for category in categories %}
-        <div class="sidebar-group">
-            <div class="sidebar-title">{{ category }}</div>
-            {% assign items = site.docs | where: "category", category | sort:
-            "order" %} {% for item in items %}
-            <a href="#{{ item.slug }}" class="sidebar-link"
-                >{{ item.menu_title | default: item.title }}</a
-            >
-            {% endfor %}
-        </div>
-        {% endfor %}
-    </aside>
+    {% include layout/sidebar.html %}
 
-    <!-- Main Content -->
-    <article class="docs-content">
-        <!-- Mobile Quick Jump (Auto-generated) -->
-        <div class="hidden-desktop mobile-toc">
-            <h4>Jump to section:</h4>
-            <div class="mobile-toc-links">
-                {% assign featured_sections = site.docs | sort: "order" | limit:6 %} {% for
-                item in featured_sections %}
-                <a href="#{{ item.slug }}" class="mobile-toc-link"
-                    >{{ item.menu_title | default: item.title }}</a
-                >
-                {% endfor %}
-            </div>
-        </div>
+    <article class="docs-main">
+        <header class="docs-header">
+            <h1 class="hero-title">{{ page.title }}</h1>
+            <p>{{ page.description }}</p>
+            <hr class="article-divider" />
+        </header>
 
-        <!-- Render Content (Infinite Scroll) -->
-        <h1 id="introduction">Documentation</h1>
-        <p>
-            Welcome to the official documentation for <strong>dotman</strong>.
-            Dotman is a high-performance dotfiles manager written in Nim.
-        </p>
-        <p>
-            Dotman features multi-profile support, automatic conflict detection,
-            and a zero-configuration approach. It works seamlessly on Linux.
-        </p>
+        {% assign project_docs = site.docs | where: "project", page.project |
+        sort: "order" %} {% for doc in project_docs %}
+        <section id="{{ doc.slug }}" class="doc-section">
+            {{ doc.content }}
+        </section>
 
-        {% assign all_docs = site.docs | sort: "order" %} {% for doc in all_docs
-        %}
-        <!-- Section Anchor -->
-        <div id="{{ doc.slug }}" style="scroll-margin-top: 6rem"></div>
-
-        <!-- Render Markdown Content -->
-        {{ doc.content }} {% endfor %}
+        {% unless forloop.last %}
+        <div class="section-divider"></div>
+        {% endunless %} {% endfor %}
     </article>
 </div>

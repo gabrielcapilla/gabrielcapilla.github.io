@@ -1,0 +1,25 @@
+<a
+    href="{{ include.url | relative_url }}"
+    class="project-card {{ include.class }}"
+>
+    <div class="card-glow"></div>
+
+    <div class="card-content">
+        <div>
+            <div class="card-header">
+                <div class="project-icon">
+                    {{ include.icon | default: '~' }}
+                </div>
+                <div class="status-badge">
+                    {{ include.status | default: 'Active' }}
+                </div>
+            </div>
+            <h3 class="project-title">{{ include.title }}</h3>
+            <p class="project-desc">{{ include.description }}</p>
+        </div>
+
+        <div class="card-footer">
+            View Project {% include components/icon.html name='arrow-right' %}
+        </div>
+    </div>
+</a>

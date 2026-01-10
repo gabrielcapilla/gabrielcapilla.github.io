@@ -1,0 +1,123 @@
+---
+layout: default
+---
+
+<section class="hero-section hero--center">
+    <div class="hero-symbol">~</div>
+    <h1 class="hero-title">{{ page.hero.title }}</h1>
+    <p class="hero-subtitle">{{ page.hero.subtitle }}</p>
+
+    <div class="mt-6">
+        <a
+            href="{{ page.hero.cta_link | default: '#install' }}"
+            class="btn-primary"
+        >
+            {% include components/icon.html name='download' %} {{
+            page.hero.cta_text | default: 'Get Started' }}
+        </a>
+    </div>
+
+    {% include components/terminal.html %}
+</section>
+
+{% if page.features %}
+<section id="features" class="features-section">
+    <div class="features-grid">
+        <div>
+            <h2 class="feature-title-main">
+                {{ page.hero.feature_title | default: 'Native performance,<br />not
+                a script' }}
+            </h2>
+            <div class="feature-text">
+                {{ page.hero.feature_description | default:
+                site.data.ui.default_feature_description }}
+            </div>
+        </div>
+
+        <div class="pt-4">
+            {% for feature in page.features %}
+            <div class="sub-feature">
+                <h3>{{ feature.title }}</h3>
+                <p class="feature-text">{{ feature.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endif %} {% if page.show_community %}
+<section class="community-section">
+    <div class="community-grid">
+        {% for item in page.community %}
+        <div class="community-item">
+            {% if forloop.first and item.icon %}
+            <div class="flex justify-center mb-6">
+                {% include components/icon.html name=item.icon
+                class='community-icon' %}
+            </div>
+            {% endif %} {% if forloop.first %}
+            <h2 class="hero-title">
+                {{ item.title | default: 'Made with love' }}
+            </h2>
+            {% else %}
+            <h2 class="community-title">
+                {{ item.title | default: 'Made with love' }}
+            </h2>
+            {% endif %}
+            <p class="community-description">
+                {{ item.description | default: 'We&#39;re making a tool that we
+                enjoy using ourselves.' }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %} {% if page.install_cmd %}
+
+<section id="install" class="install-section">
+    <h2 class="hero-title" style="font-size: 3rem; margin-bottom: 1.5rem">
+        {{ page.install.title | default: 'Install in seconds' }}
+    </h2>
+    <p class="hero-subtitle">
+        {{ page.install.subtitle | default: 'No dependencies, no complex setup.
+        Just a single binary ready to run.' }}
+    </p>
+
+    <div
+        class="code-box-display"
+        data-copy="{{ page.install_cmd }}"
+        data-tooltip="main-copy-tooltip"
+    >
+        <div class="code-content">
+            <span class="gray">$</span> <span class="yellow">curl</span> -sL
+            gabrielcapilla.github.io/install <span class="gray">|</span>
+            <span class="yellow">sh</span> -s dotman
+        </div>
+        <div
+            class="pl-4"
+            style="border-left: 1px solid rgba(255, 255, 255, 0.1)"
+        >
+            {% include components/icon.html name='copy' class='copy-icon' %}
+        </div>
+        <div id="main-copy-tooltip" class="tooltip">Copied to clipboard</div>
+    </div>
+
+    {% if page.alternative_install %}
+    <div class="text-muted flex items-center justify-center gap-2 flex-wrap">
+        <span>{{ page.alternative_install.label }}</span>
+        {% for alt in page.alternative_install.options %}
+        <div
+            class="nimble-box"
+            data-copy="{{ alt.command }}"
+            data-tooltip="{{ alt.tooltip_id }}"
+        >
+            <code>{{ alt.label }}</code>
+            {% include components/icon.html name='copy' %}
+            <div id="{{ alt.tooltip_id }}" class="tooltip">Copied</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endif %}

@@ -1,0 +1,22 @@
+<aside class="docs-sidebar">
+    <div class="sidebar-sticky">
+        {% assign project_docs = site.docs | where: "project", page.project |
+        sort: "order" %} {% assign categories = "Getting Started,Core
+        Concepts,Commands,Advanced" | split: "," %} {% for category in
+        categories %}
+        <div class="sidebar-group">
+            <div class="sidebar-title">{{ category }}</div>
+            {% assign items = project_docs | where: "category", category %} {%
+            for item in items %}
+            <a
+                href="#{{ item.slug }}"
+                class="sidebar-link"
+                data-target="{{ item.slug }}"
+            >
+                {{ item.menu_title | default: item.title }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+</aside>

@@ -1,42 +1,13 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{{ page.title }} | {{ site.title }}</title>
-        <meta name="description" content="{{ site.description }}" />
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-
-        <!-- Favicon -->
-        <link rel="icon" type="image/png" href="{{ '/assets/favicon.png' | relative_url }}" />
-
-        <!-- CSS -->
-        <link
-            rel="stylesheet"
-            href="{{ '/assets/css/styles.css' | relative_url }}"
-        />
-    </head>
+    {% include layout/head.html %}
     <body>
-        <!-- Fixed Background -->
         <div class="fixed-background"></div>
-
-        <!-- Content Wrapper -->
         <div class="site-wrapper">
-            {% include header.html %}
-
+            {% include layout/header.html %}
             <main>{{ content }}</main>
-
-            {% include footer.html %}
+            {% include layout/footer.html %}
         </div>
-
-        <!-- Vanilla JS for Interactions -->
         <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
     </body>
 </html>

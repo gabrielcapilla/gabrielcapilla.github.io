@@ -1,13 +1,11 @@
 <footer>
     <div class="footer-grid">
-        <!-- Brand -->
         <div class="footer-col brand-col">
             <a href="{{ '/' | relative_url }}" class="footer-brand">
                 <div class="brand-symbol">~</div>
             </a>
         </div>
 
-        <!-- Links -->
         <div class="footer-col">
             <h4>Projects</h4>
             <ul class="footer-links">
@@ -23,31 +21,28 @@
         <div class="footer-col">
             <h4>Explore</h4>
             <ul class="footer-links">
-                <li><a href="{{ '/' | relative_url }}">Home</a></li>
+                {% for link in site.data.navigation.main %}
                 <li>
-                    <a href="{{ '/projects/' | relative_url }}">Projects</a>
+                    <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
                 </li>
-                <li>
-                    <a href="{{ '/projects/' | relative_url }}">Writings</a>
-                </li>
+                {% endfor %}
             </ul>
         </div>
 
         <div class="footer-col">
             <h4>Connect</h4>
             <ul class="footer-links">
+                {% for social in site.data.social.social %}
                 <li>
                     <a
-                        href="https://github.com/gabrielcapilla"
+                        href="{{ social[1].url }}"
                         target="_blank"
                         class="social-link"
                     >
-                        GitHub
+                        {{ social[1].label }}
                     </a>
                 </li>
-                <li>
-                    <a class="disabled"> Email </a>
-                </li>
+                {% endfor %}
             </ul>
         </div>
     </div>
