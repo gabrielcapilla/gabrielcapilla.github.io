@@ -1,0 +1,44 @@
+menus:
+  hub:
+    - title: Projects
+      url: /projects/
+    - title: Writing
+      url: /writing/
+    - title: GitHub
+      url: https://github.com/gabrielcapilla
+      icon: github
+
+  dotman:
+    - title: Back to Hub
+      url: /
+      icon: arrow-left
+    - title: Overview
+      url: /projects/dotman/
+    - title: Docs
+      url: /projects/dotman/docs/
+    - title: GitHub
+      url: https://github.com/gabrielcapilla/dotman
+      icon: github
+
+mobile:
+  hub:
+    - title: Home
+      url: /
+      icon: home
+    - title: Projects
+      url: /projects/
+      icon: layers
+    - title: Writing
+      url: /writing/
+      icon: pen
+
+  dotman:
+    - title: Overview
+      url: /projects/dotman/
+      icon: terminal
+    - title: Docs
+      url: /projects/dotman/docs/
+      icon: book
+    - title: GitHub
+      url: https://github.com/gabrielcapilla/dotman
+      icon: github

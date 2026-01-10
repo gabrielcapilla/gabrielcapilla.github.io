@@ -178,7 +178,7 @@ function initSmoothScroll() {
       const targetUrl = new URL(this.href);
       const currentUrl = new URL(window.location.href);
 
-      // Check if the link points to the current page (same path and hostname)
+      // Check if link points to current page (same path and hostname)
       if (
         targetUrl.pathname === currentUrl.pathname &&
         targetUrl.hostname === currentUrl.hostname

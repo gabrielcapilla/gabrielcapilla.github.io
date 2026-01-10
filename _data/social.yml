@@ -1,0 +1,15 @@
+# Global Social Networks
+social:
+  github:
+    url: https://github.com/gabrielcapilla
+    label: GitHub
+  youtube:
+    url: https://youtube.com/unboxmespain
+    label: YouTube
+
+# Project Social Media
+project_social:
+  dotman:
+    github:
+      url: https://github.com/gabrielcapilla/dotman
+      label: GitHub
