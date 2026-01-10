@@ -1,0 +1,81 @@
+/* --- Hub / Personal Portfolio Styles --- */
+
+// Hub Hero Section
+.hub-hero {
+    margin-bottom: 8rem;
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+@include tablet {
+    .hub-hero {
+        margin-top: 5rem;
+    }
+}
+
+.hub-title {
+    font-size: 3rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: white;
+}
+
+.hub-title span {
+    color: rgba(175, 190, 255, 0.5);
+}
+
+@include tablet {
+    .hub-title {
+        font-size: 4.5rem;
+    }
+}
+
+.hub-bio {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 42rem;
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+@include tablet {
+    .hub-bio {
+        font-size: 1.5rem;
+    }
+}
+
+.hub-socials {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.hub-social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.hub-social-link:hover {
+    color: rgba(175, 190, 255, 1);
+}
+
+.hub-social-divider {
+    width: 1px;
+    height: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+// Hub Section Wrapper
+.hub-section {
+    margin-bottom: 8rem;
+    scroll-margin-top: 6rem; /* Offset for sticky header */
+}

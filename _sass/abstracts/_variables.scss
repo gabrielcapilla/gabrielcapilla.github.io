@@ -1,0 +1,62 @@
+// 1. Sass Variables (Static configuration for compilation)
+$font-sans: "Instrument Sans", system-ui, sans-serif;
+$font-mono: "JetBrains Mono", monospace;
+$max-width: 1400px;
+$content-width: 1400px; // Docs uses wider width for sidebar
+
+// Container-specific widths
+$hub-width: 1200px; // Hub & Home
+$post-width: 800px; // Blog posts
+$docs-width: 1400px; // Documentation
+
+// Breakpoints
+$tablet: 768px;
+$desktop: 1024px;
+
+// 2. CSS Custom Properties (Dynamic theming for browser)
+:root {
+    // Typography (CRITICAL - Inject Sass vars into CSS vars)
+    --font-sans: #{$font-sans};
+    --font-mono: #{$font-mono};
+
+    // Colors Base
+    --bg-dark: #0a0e17;
+    --text-white: #ffffff;
+    --text-muted: rgba(175, 190, 255, 0.8);
+    --text-muted-darker: rgba(175, 190, 255, 0.6);
+    --primary-blue: #152671;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    // Sky Gradient
+    --sky-start: rgb(21, 38, 113);
+    --sky-mid: rgb(27, 44, 120);
+    --sky-end: #5669bd;
+
+    --sky-gradient: linear-gradient(
+        180deg,
+        var(--sky-start) 10%,
+        var(--sky-mid) 30%,
+        var(--sky-end) 100%
+    );
+
+    --header-gradient: linear-gradient(
+        180deg,
+        rgba(21, 38, 113, 1) 0%,
+        rgba(21, 38, 113, 0) 100%
+    );
+
+    // Semantic Palette
+    --color-green: #22c55e;
+    --color-green-light: #4ade80;
+    --color-green-success: #16a34a;
+    --color-orange: #d97706;
+    --color-purple: rgba(175, 190, 255, 0.9);
+    --color-purple-light: rgba(175, 190, 255, 0.5);
+
+    // Layout Widths (Inject Sass vars)
+    --max-width: #{$max-width};
+    --content-width: #{$content-width};
+    --hub-width: #{$hub-width};
+    --post-width: #{$post-width};
+    --docs-width: #{$docs-width};
+}

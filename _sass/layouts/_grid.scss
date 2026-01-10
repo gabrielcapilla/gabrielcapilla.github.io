@@ -1,0 +1,72 @@
+// 1. Hub & General Pages Container (Original: 1200px)
+// Applies to: Home, Projects List, Writing List
+.hub-container, .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 8rem;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+// 2. Post Container (Original: 800px)
+// Applies to: Individual blog posts (narrow layout)
+.post-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 1.5rem 8rem;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+// 3. Docs Container (Original: 1400px)
+// Applies to: Documentation (wider for sidebar + content)
+.docs-container {
+    display: flex;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 8rem;
+}
+
+// Mobile: remove flex and gap to prevent horizontal scroll
+@media (max-width: 1023px) {
+    .docs-container {
+        display: block;
+        gap: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+// Section Styling
+.section-header {
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted-darker);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+// Projects Grid
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+
+    @include tablet {
+        grid-template-columns: 1fr 1fr;
+    }
+}

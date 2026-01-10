@@ -1,0 +1,127 @@
+.project-card {
+    position: relative;
+    border-radius: 1rem;
+    padding: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+    border: 1px solid var(--border-color);
+}
+
+.project-card.featured {
+    background: rgba(10, 14, 23, 0.6);
+    backdrop-filter: blur(12px);
+}
+
+.project-card.featured:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.project-card.placeholder {
+    background: rgba(10, 14, 23, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: default;
+}
+
+.project-card.placeholder:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.card-glow {
+    position: absolute;
+    top: -5rem;
+    right: -5rem;
+    width: 16rem;
+    height: 16rem;
+    background: #152671;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.project-card:hover .card-glow {
+    opacity: 0.6;
+}
+
+.card-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.project-icon {
+    width: 3rem;
+    height: 3rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: white;
+    transition: transform 0.3s;
+}
+
+.project-card:hover .project-icon {
+    transform: scale(1.1);
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    background: rgba(59, 130, 246, 0.2);
+    color: #bfdbfe;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.project-title {
+    font-size: 1.875rem;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.project-desc {
+    font-size: 1.125rem;
+    color: rgba(175, 190, 255, 0.7);
+    line-height: 1.5;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.project-card:hover .card-footer {
+    transform: translateX(0.5rem);
+}
+
+.card-footer-placeholder {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: rgba(175, 190, 255, 0.4);
+}

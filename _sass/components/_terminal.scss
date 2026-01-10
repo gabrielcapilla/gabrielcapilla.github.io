@@ -1,26 +1,3 @@
-.btn-primary {
-    background: white;
-    color: rgb(21, 38, 113);
-    padding: 0.875rem 2rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 1.125rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-    transition:
-        transform 0.2s,
-        background-color 0.2s;
-}
-
-.btn-primary:hover {
-    background-color: #ebedff;
-    transform: scale(1.05);
-}
-
-/* Terminal */
 .terminal-wrapper {
     width: 100%;
     max-width: 56rem;
@@ -57,14 +34,17 @@
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .dot.red {
     background: #ff5f57;
     border-color: #e0443e;
 }
+
 .dot.yellow {
     background: #febc2e;
     border-color: #d69e2a;
 }
+
 .dot.green {
     background: #28c840;
     border-color: #27ae37;
@@ -86,23 +66,28 @@
 .cmd-line {
     margin-bottom: 1rem;
 }
+
 .cmd-prompt {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.25rem;
 }
+
 .prompt-arrow {
     color: #16a34a;
     font-weight: bold;
 }
+
 .prompt-tilde {
     color: #2563eb;
     font-weight: bold;
 }
+
 .cmd-output {
     padding-left: 1rem;
     color: #6b7280;
 }
+
 .cursor {
     display: inline-block;
     width: 0.5rem;
@@ -122,7 +107,6 @@
     }
 }
 
-/* Code Box Display (Install section) */
 .code-box-display {
     background: var(--bg-dark);
     border: 1px solid var(--border-color);
@@ -150,9 +134,52 @@
     white-space: nowrap;
 }
 
+// Mobile fix: truncate code box with gradient fade on small screens
+// Industry standard: show truncated content with gradient fade indicator
+@media (max-width: 480px) {
+    .code-box-display {
+        padding: 1rem;
+        margin: 1rem auto;
+        max-width: calc(100vw - 3rem); // Prevent page overflow
+        overflow: hidden;
+        position: relative;
+    }
+
+    .code-content {
+        white-space: nowrap; // Keep single line
+        overflow: hidden; // Hide overflow
+        text-overflow: ellipsis; // Show "..." at end
+        max-width: calc(100vw - 7rem); // Account for copy icon and padding
+    }
+
+    // Add gradient fade to indicate more content
+    .code-box-display::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4rem;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(10, 14, 23, 0.3) 40%,
+            var(--bg-dark) 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    // Ensure tooltip stays above gradient
+    .tooltip {
+        z-index: 2;
+    }
+}
+
 .yellow {
     color: #facc15;
 }
+
 .gray {
     color: #6b7280;
 }
@@ -160,12 +187,11 @@
 .copy-icon {
     color: var(--text-muted);
 }
+
 .code-box-display:hover .copy-icon {
     color: white;
 }
 
-/* Tooltip / Toast Notification */
-/* Re-styled to match the "Copied" toast from documentation */
 .tooltip {
     position: absolute;
     top: 50%;
@@ -188,7 +214,6 @@
     white-space: nowrap;
 }
 
-/* Add check icon before text via CSS for tooltips */
 .tooltip::before {
     content: "";
     display: inline-block;
@@ -214,20 +239,5 @@
     font-family: var(--font-mono);
     margin-left: 0.5rem;
     cursor: pointer;
-    position: relative; /* Needed for absolute positioning of tooltip */
-}
-
-/* Icon Utils */
-.icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-}
-.icon-lg {
-    width: 1.5rem;
-    height: 1.5rem;
+    position: relative;
 }

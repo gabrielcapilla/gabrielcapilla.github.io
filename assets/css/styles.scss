@@ -1,11 +1,29 @@
 ---
 ---
 
-@import "variables";
-@import "base";
-@import "components";
-@import "docs";
-@import "home";
-@import "hub";
-@import "layout";
-@import "post";
+// 1. Abstracts (Variables, Mixins) - NO generate CSS, only configuration
+@import "abstracts/variables";
+@import "abstracts/mixins";
+
+// 2. Base (Reset, Typography, Utilities)
+@import "base/reset";
+@import "base/typography";
+@import "base/utilities";
+
+// 3. Layout (Macro structure)
+@import "layouts/grid";
+@import "layouts/hub";
+@import "layouts/docs";
+@import "layouts/post";
+@import "layouts/navbar";
+@import "layouts/footer";
+
+// 4. Components (Reusable blocks)
+@import "components/buttons";
+@import "components/cards";
+@import "components/icons";
+@import "components/terminal";
+@import "components/lists";
+@import "components/code";
+@import "components/hero";
+@import "components/article";

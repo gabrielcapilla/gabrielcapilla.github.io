@@ -1,12 +1,4 @@
-/* Blog Post Layout */
-
-.post-container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 6rem 1.5rem 8rem;
-    animation: fadeIn 0.5s ease-out forwards;
-}
+/* --- Blog Post Layout --- */
 
 .back-link {
     display: inline-flex;
@@ -47,7 +39,7 @@
     margin-bottom: 1.5rem;
 }
 
-@media (min-width: 768px) {
+@include tablet {
     .post-title {
         font-size: 3.5rem;
     }
@@ -66,7 +58,6 @@
     margin-bottom: 3rem;
 }
 
-/* Typography for Content */
 .post-content {
     color: var(--text-muted);
     font-size: 1.125rem;
@@ -102,6 +93,7 @@
     margin-bottom: 0.5rem;
     list-style-type: disc;
 }
+
 .post-content li::marker {
     color: #60a5fa; /* Blue marker */
 }
