@@ -17,9 +17,21 @@ collections:
     sort_by: order
   projects:
     output: true
+    permalink: /projects/:slug/
+
+defaults:
+  - scope:
+      path: "_docs/dotman"
+    values:
+      project: "dotman"
+      layout: "documentation"
+
+include:
+  - _pages
 
 exclude:
   - node_modules
   - package.json
   - package-lock.json
   - .gitignore
+  - ORIGINAL
