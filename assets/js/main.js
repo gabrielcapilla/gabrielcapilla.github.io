@@ -48,7 +48,7 @@ function enhanceCodeBlocks() {
 
       const trimmed = lineText.trim();
       let isComment = trimmed.startsWith("#");
-      let commandToCopy = isComment ? null : trimmed.replace(/#.*$/, "").trim(); // Strip inline comments for copy
+      let commandToCopy = isComment ? null : trimmed.replace(/\s#.*$/, "").trim(); // Strip inline comments (only if preceded by space)
 
       if (isComment) {
         lineEl.innerHTML = `<span class="syntax-comment">${lineText}</span>`;
@@ -84,7 +84,7 @@ function enhanceCodeBlocks() {
         textToCopy = lines
           .map((l) => l.trim())
           .filter((l) => !l.startsWith("#"))
-          .map((l) => l.replace(/#.*$/, "").trim()) // remove inline comments
+          .map((l) => l.replace(/\s#.*$/, "").trim()) // remove inline comments (only if preceded by space)
           .join("\n");
       }
 
