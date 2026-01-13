@@ -1,8 +1,7 @@
 <aside class="docs-sidebar">
     <div class="sidebar-sticky">
         {% assign project_docs = site.docs | where: "project", page.project |
-        sort: "order" %} {% assign categories = "Getting Started,Core
-        Concepts,Commands,Advanced" | split: "," %} {% for category in
+        sort: "order" %} {% assign categories = "Getting Started,Core Concepts,Commands,Advanced" | split: "," %} {% for category in
         categories %}
         <div class="sidebar-group">
             <div class="sidebar-title">{{ category }}</div>
