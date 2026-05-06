@@ -1,0 +1,175 @@
+.project-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    overflow: hidden;
+    transition: all var(--duration-base) ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    height: 100%;
+    border: var(--border-hairline) solid var(--border-color);
+}
+
+.project-card.featured {
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+}
+
+.project-card.featured:hover {
+    border-color: var(--color-divider);
+}
+
+.project-card.placeholder {
+    background: var(--surface-muted);
+    border: var(--border-hairline) solid var(--surface-hover);
+    cursor: default;
+}
+
+.project-card.placeholder:hover {
+    border-color: var(--border-color);
+}
+
+.card-glow {
+    position: absolute;
+    top: calc(-1 * var(--space-8));
+    right: calc(-1 * var(--space-8));
+    width: var(--space-9);
+    height: var(--space-9);
+    background: var(--sky-start);
+    border-radius: 32%;
+    filter: blur(var(--blur-card-glow));
+    opacity: 0.4;
+    transition: opacity var(--duration-base);
+    pointer-events: none;
+}
+
+.project-card:hover .card-glow {
+    opacity: 0.6;
+}
+
+.card-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    gap: var(--space-7);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+}
+
+.project-icon {
+    width: var(--space-6);
+    height: var(--space-6);
+    background: var(--border-color);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-lg);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-white);
+    transition: transform var(--duration-base);
+}
+
+.project-icon .icon {
+    width: var(--space-4);
+    height: var(--space-4);
+}
+
+.project-card:hover .project-icon {
+    transform: scale(var(--scale-hover));
+}
+
+.project-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.repo-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-pill);
+    background: var(--surface-hover);
+    border: var(--border-hairline) solid var(--border-color);
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.status-badge {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    background: var(--status-default-bg);
+    color: var(--status-default-text);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    border: var(--border-hairline) solid var(--status-default-border);
+}
+
+.status-badge--active {
+    background: var(--status-active-bg);
+    color: var(--status-active-text);
+    border-color: var(--status-active-border);
+}
+
+.status-badge--deprecated {
+    background: var(--status-deprecated-bg);
+    color: var(--status-deprecated-text);
+    border-color: var(--status-deprecated-border);
+}
+
+.status-badge--archived {
+    background: var(--status-archived-bg);
+    color: var(--status-archived-text);
+    border-color: var(--status-archived-border);
+}
+
+.status-badge--in-maintenance {
+    background: var(--status-maintenance-bg);
+    color: var(--status-maintenance-text);
+    border-color: var(--status-maintenance-border);
+}
+
+.project-title {
+    font-size: var(--font-size-xl);
+    font-weight: 500;
+    color: var(--text-white);
+    margin-bottom: var(--space-3);
+}
+
+.project-desc {
+    font-size: var(--font-size-md);
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-white);
+    font-weight: 500;
+    transition: transform var(--duration-fast);
+}
+
+.project-card:hover .card-footer {
+    transform: translateX(var(--space-2));
+}
+
+.card-footer-placeholder {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--text-muted-darker);
+}

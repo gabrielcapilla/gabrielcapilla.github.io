@@ -1,0 +1,18 @@
+{% assign video_id = include.id %}
+{% assign title = include.title | default: 'Vimeo Video' %}
+{% assign class = include.class | default: '' %}
+{% assign autoplay = include.autoplay | default: false %}
+{% assign loop = include.loop | default: false %}
+{% assign muted = include.muted | default: false %}
+
+<div class="vimeo-wrapper {{ class }}">
+    <iframe
+        src="https://player.vimeo.com/video/{{ video_id }}{% if autoplay or loop %}?{% if autoplay %}autoplay=1{% endif %}{% if loop %}&loop=1{% endif %}{% if muted %}&muted=1{% endif %}{% endif %}"
+        title="{{ title }}"
+        frameborder="0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+        decoding="async">
+    </iframe>
+</div>

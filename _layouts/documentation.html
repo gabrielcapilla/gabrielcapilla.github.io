@@ -1,25 +1,31 @@
 ---
 layout: default
+capabilities:
+    - copy
+    - smooth-scroll
+    - reframe
 ---
+
+{% assign project_key = page.project %}
+{% assign current_project = site.projects | where: "slug", project_key | first %}
+{% if page.title %}
+    {% assign docs_title = page.title %}
+{% else %}
+    {% assign docs_title = current_project.display_title | default: current_project.title | append: " Documentation" %}
+{% endif %}
+{% assign docs_description = page.description | default: current_project.docs_description | default: current_project.description %}
 
 <div class="docs-container">
     {% include layout/sidebar.html %}
 
-    <article class="docs-main">
-        <header class="docs-header">
-            <h1 class="hero-title">{{ page.title }}</h1>
-            <p>{{ page.description }}</p>
-            <hr class="article-divider" />
-        </header>
-
-        {% assign project_docs = site.docs | where: "project", page.project |
-        sort: "order" %} {% for doc in project_docs %}
+    <article class="docs-main" aria-label="{{ docs_title | default: 'Project documentation' }}">
+        {% assign project_docs = site.docs | where: "project", project_key | sort: "order" %}
+        {% for doc in project_docs %}
         <section id="{{ doc.slug }}" class="doc-section">
-            {{ doc.content }}
+            <div class="post-content">
+                {{ doc.content }}
+            </div>
         </section>
-
-        {% unless forloop.last %}
-        <div class="section-divider"></div>
-        {% endunless %} {% endfor %}
+        {% endfor %}
     </article>
 </div>

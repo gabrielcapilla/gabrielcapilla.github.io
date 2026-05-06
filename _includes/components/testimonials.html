@@ -1,0 +1,56 @@
+{% if site.data.settings.testimonials.enable == true %}
+<!-- begin section testimonials -->
+<section class="section-testimonials">
+    <div class="testimonials-container">
+        <div class="testimonials-header">
+            {% if site.data.settings.testimonials.title %}
+                <h2 class="testimonials-title">{{ site.data.settings.testimonials.title }}</h2>
+            {% endif %}
+            {% if site.data.settings.testimonials.description %}
+                <p class="testimonials-description">{{ site.data.settings.testimonials.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="testimonials__slider splide">
+            <div class="splide__track">
+                <div class="splide__list">
+                    {% for testimonial_item in site.data.settings.testimonial_items %}
+                    <div class="testimonial-item splide__slide">
+                        <div class="testimonial-content">
+                            {% if testimonial_item.image %}
+                                <div class="client-meta">
+                                    <div class="image-container">
+                                        <img class="client-avatar" src="{{ testimonial_item.image | relative_url }}" alt="{{ testimonial_item.name }}" loading="lazy" decoding="async">
+                                    </div>
+                                    <div class="client-info">
+                                        {% if testimonial_item.name %}
+                                            <h3 class="client-name">{{ testimonial_item.name }}</h3>
+                                        {% endif %}
+                                        {% if testimonial_item.designation %}
+                                            <p class="client-designation">{{ testimonial_item.designation }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <svg class="testimonial-icon" xmlns="http://www.w3.org/2000/svg" width="96" height="16" fill="none" viewBox="0 0 96 16">
+                                <g fill="var(--text-white)">
+                                    <path d="m8 1.333 2.06 4.174 4.607.673-3.334 3.247.787 4.586L8 11.847l-4.12 2.166.787-4.586L1.333 6.18l4.607-.673L8 1.333Z"/>
+                                    <path d="m28 1.333 2.06 4.174 4.607.673-3.334 3.247.787 4.586L28 11.847l-4.12 2.166.787-4.586-3.334-3.247 4.607-.673L28 1.333Z"/>
+                                    <path d="m48 1.333 2.06 4.174 4.607.673-3.334 3.247.787 4.586L48 11.847l-4.12 2.166.787-4.586-3.334-3.247 4.607-.673L48 1.333Z"/>
+                                    <path d="m68 1.333 2.06 4.174 4.607.673-3.334 3.247.787 4.586L68 11.847l-4.12 2.166.787-4.586-3.334-3.247 4.607-.673L68 1.333Z"/>
+                                    <path d="m88 1.333 2.06 4.174 4.607.673-3.334 3.247.787 4.586L88 11.847l-4.12 2.166.787-4.586-3.334-3.247 4.607-.673L88 1.333Z"/>
+                                </g>
+                            </svg>
+                            {% if testimonial_item.content %}
+                                <p class="client-text">{{ testimonial_item.content }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- end section testimonials -->
+{% endif %}

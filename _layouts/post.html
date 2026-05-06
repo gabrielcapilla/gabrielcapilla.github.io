@@ -1,20 +1,22 @@
 ---
 layout: default
+capabilities:
+    - copy
+    - media
+    - image-slider
+    - smooth-scroll
+    - reframe
 ---
 
 <div class="post-container">
-    <a href="{{ '/' | relative_url }}" class="back-link">
-        {% include components/icon.html name='arrow-left' %} Back to Hub
-    </a>
-
     <header class="post-header">
         <div class="post-meta">
-            <span style="display: flex; align-items: center; gap: 0.5rem">
+            <span class="meta-item">
                 {% include components/icon.html name='calendar' %} {{ page.date
                 | date: "%Y-%m-%d" }}
             </span>
-            <span>•</span>
-            <span style="display: flex; align-items: center; gap: 0.5rem">
+            <span class="meta-divider">•</span>
+            <span class="meta-item">
                 {% include components/icon.html name='clock' %} {{ content |
                 number_of_words | divided_by: 180 | plus: 1 }} min read
             </span>
@@ -31,10 +33,7 @@ layout: default
 
     <article class="post-content">{{ content }}</article>
 
-    <div class="post-footer">
-        <span>Thanks for reading.</span>
-        <button class="share-btn">
-            {% include components/icon.html name='share' %} Share article
-        </button>
-    </div>
+    <footer class="post-footer">
+        <p class="post-footer__thanks">Thanks for reading.</p>
+    </footer>
 </div>

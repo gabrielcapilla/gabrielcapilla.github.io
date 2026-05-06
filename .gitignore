@@ -5,3 +5,5 @@ _site
 Gemfile.lock
 TODO.md
 generate_favicon.py
+node_modules/
+reports/

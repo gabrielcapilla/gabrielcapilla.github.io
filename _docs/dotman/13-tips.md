@@ -1,6 +1,7 @@
 ---
 title: Tips & Best Practices
 slug: tips
+project: dotman
 category: Advanced
 order: 13
 ---

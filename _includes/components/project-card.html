@@ -1,25 +1,51 @@
-<a
-    href="{{ include.url | relative_url }}"
-    class="project-card {{ include.class }}"
->
+{% assign project_url = include.project.url | default: include.url %}
+{% assign project_title = include.project.display_title | default: include.project.title | default: include.title %}
+{% assign project_description = include.project.description | default: include.description %}
+{% assign project_status = include.project.status | default: include.status | default: 'Active' %}
+{% assign status_class = project_status | downcase | replace: ' ', '-' %}
+{% assign project_icon = include.project.icon | default: include.icon | default: '~' %}
+{% assign project_icon_name = include.project.icon_name | default: include.icon_name %}
+{% assign project_cta = include.cta | default: 'View Project' %}
+{% assign repository_stats = site.data.github_repositories[include.project.slug] %}
+{% assign stars_enabled = site.data.settings.projects.github_stars.enable | default: true %}
+{% assign card_stars_enabled = site.data.settings.projects.github_stars.show_in_cards | default: true %}
+{% if include.project.github_stars.show_in_cards == false %}
+    {% assign card_stars_enabled = false %}
+{% endif %}
+
+<a href="{{ project_url | relative_url }}" class="project-card {{ include.class }}">
     <div class="card-glow"></div>
 
     <div class="card-content">
         <div>
             <div class="card-header">
                 <div class="project-icon">
-                    {{ include.icon | default: '~' }}
+                    {% if project_icon_name %}
+                    {% include components/icon.html name=project_icon_name %}
+                    {% else %}
+                    {{ project_icon }}
+                    {% endif %}
                 </div>
-                <div class="status-badge">
-                    {{ include.status | default: 'Active' }}
+                <div class="project-card-meta">
+                    {% if stars_enabled and card_stars_enabled and repository_stats.stargazers_count != nil %}
+                    <span class="repo-stat" aria-label="{{ repository_stats.stargazers_count }} GitHub stars">
+                        {% include components/icon.html name='star' class='icon-sm' %}
+                        {{ repository_stats.stargazers_count }}
+                    </span>
+                    {% endif %}
+                    <div class="status-badge status-badge--{{ status_class }}">
+                        {{ project_status }}
+                    </div>
                 </div>
             </div>
-            <h3 class="project-title">{{ include.title }}</h3>
-            <p class="project-desc">{{ include.description }}</p>
+            <h3 class="project-title">{{ project_title }}</h3>
+            {% if project_description %}
+            <p class="project-desc">{{ project_description }}</p>
+            {% endif %}
         </div>
 
         <div class="card-footer">
-            View Project {% include components/icon.html name='arrow-right' %}
+            {{ project_cta }} {% include components/icon.html name='arrow-right' %}
         </div>
     </div>
 </a>

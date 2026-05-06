@@ -1,0 +1,144 @@
+{% if site.data.settings.mailchimp.enable == true %}
+<!-- begin section subscribe -->
+<section class="section-subscribe">
+    <div class="section-subscribe__inner">
+        <div class="section-subscribe__content">
+            {% if site.data.settings.mailchimp.title %}
+                <h3 class="section-subscribe__title">{{ site.data.settings.mailchimp.title }}</h3>
+            {% endif %}
+            {% if site.data.settings.mailchimp.description %}
+                <p class="section-subscribe__description">{{ site.data.settings.mailchimp.description }}</p>
+            {% endif %}
+        </div>
+
+        <form class="section-subscribe__form validate"
+            action="{% if site.data.settings.mailchimp.identifier %}//{{ site.data.settings.mailchimp.identifier }}{% else %}#{% endif %}"
+            method="POST" id="membedded-subscribe-form" name="membedded-subscribe-form" target="_blank" novalidate>
+            <label class="screen-reader-text" for="mce-EMAIL">Email address</label>
+            <input class="section-subscribe__email required email" id="mce-EMAIL" type="email" name="EMAIL" placeholder="{% if site.data.settings.mailchimp.input_text %}{{ site.data.settings.mailchimp.input_text }}{% else %}Your email address{% endif %}" required>
+            <button class="section-subscribe__button" id="membedded-subscribe" type="submit" name="subscribe">
+                {{ site.data.settings.mailchimp.button_text | default: 'Subscribe' }}
+            </button>
+        </form>
+    </div>
+</section>
+<!-- end section subscribe -->
+{% endif %}
+
+<style>
+    /* Newsletter Section Styles */
+    .section-subscribe {
+        padding: 4rem 2rem;
+        margin: 4rem 0;
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        border-radius: 1rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .section-subscribe__inner {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .section-subscribe__content {
+        margin-bottom: 2rem;
+    }
+
+    .section-subscribe__title {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+        color: var(--text-white);
+    }
+
+    .section-subscribe__description {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+    }
+
+    .section-subscribe__form {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .section-subscribe__email {
+        flex: 1;
+        min-width: 250px;
+        padding: 0.875rem 1.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        color: var(--text-white);
+        font-size: 1rem;
+        transition: all 0.2s ease;
+
+        &::placeholder {
+            color: var(--text-muted-darker);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--sky-end);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+    }
+
+    .section-subscribe__button {
+        padding: 0.875rem 2rem;
+        background: var(--primary-blue);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: var(--sky-end);
+            transform: translateY(-2px);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--sky-end);
+            outline-offset: 2px;
+        }
+    }
+
+    .screen-reader-text {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .section-subscribe {
+            padding: 3rem 1.5rem;
+        }
+
+        .section-subscribe__title {
+            font-size: 1.5rem;
+        }
+
+        .section-subscribe__description {
+            font-size: 1rem;
+        }
+
+        .section-subscribe__form {
+            flex-direction: column;
+        }
+
+        .section-subscribe__email,
+        .section-subscribe__button {
+            width: 100%;
+        }
+    }
+</style>

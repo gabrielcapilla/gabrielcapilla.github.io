@@ -1,10 +1,12 @@
 ---
 layout: documentation
-title: Documentation
+title: dotman documentation
+description: Installation, quick start, profiles, validation, and command reference for the dotman Linux dotfiles manager.
 project: dotman
-nav_menu: dotman
 permalink: /projects/dotman/docs/
-redirect_from:
-  - /docs/
-  - /docs
+image:
+  path: /preview.webp
+  alt: dotman documentation
+seo:
+  type: TechArticle
 ---

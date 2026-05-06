@@ -1,0 +1,330 @@
+// 1. Sass Variables (Static configuration for compilation)
+$font-sans:
+    "Instrument Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+$font-mono:
+    "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+$max-width: 1400px;
+$content-width: 1400px; // Docs uses wider width for sidebar
+
+// Container-specific widths
+$hub-width: 1400px; // Hub & Home
+$docs-width: 1400px; // Documentation
+$docs-sidebar-width: 16rem;
+
+// Breakpoints
+$tablet: 768px;
+$desktop: 1024px;
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-400-normal.woff2")
+        format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-400-italic.woff2")
+        format("woff2");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-500-normal.woff2")
+        format("woff2");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-500-italic.woff2")
+        format("woff2");
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-600-normal.woff2")
+        format("woff2");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-600-italic.woff2")
+        format("woff2");
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-700-normal.woff2")
+        format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Instrument Sans";
+    src: url("/assets/fonts/instrument-sans-latin-700-italic.woff2")
+        format("woff2");
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("/assets/fonts/jetbrains-mono-latin-400-normal.woff2")
+        format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "JetBrains Mono";
+    src: url("/assets/fonts/jetbrains-mono-latin-700-normal.woff2")
+        format("woff2");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+// 2. CSS Custom Properties (Dynamic theming for browser)
+:root {
+    color-scheme: light dark;
+
+    // Typography (CRITICAL - Inject Sass vars into CSS vars)
+    --font-sans: #{$font-sans};
+    --font-mono: #{$font-mono};
+
+    // Colors Base
+    --bg-dark: rgb(10, 14, 23);
+    --text-white: rgb(255, 255, 255);
+    --text-muted: rgba(175, 190, 255, 0.8);
+    --text-muted-darker: rgba(190, 202, 255, 0.72);
+    --primary-blue: rgb(21, 38, 113);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --surface: rgba(10, 14, 23, 0.58);
+    --surface-muted: rgba(10, 14, 23, 0.38);
+    --surface-strong: rgba(10, 14, 23, 0.86);
+    --surface-deep: rgba(10, 21, 56, 0.9);
+    --surface-glass: rgba(21, 38, 113, 0.3);
+    --surface-glass-strong: rgba(21, 38, 113, 0.5);
+    --surface-overlay: rgba(0, 0, 0, 0.9);
+    --surface-hover: rgba(255, 255, 255, 0.05);
+    --surface-subtle: rgba(255, 255, 255, 0.03);
+    --surface-faint: rgba(255, 255, 255, 0.02);
+    --focus-ring: rgba(86, 105, 189, 0.45);
+    --focus-outline: rgb(0, 187, 255);
+
+    // Sky Gradient
+    --sky-start: rgb(21, 38, 113);
+    --sky-mid: rgb(27, 44, 120);
+    --sky-end: rgb(86, 105, 189);
+
+    --sky-gradient: linear-gradient(
+        180deg,
+        var(--sky-start) 10%,
+        var(--sky-mid) 30%,
+        var(--sky-end) 100%
+    );
+
+    --header-gradient: linear-gradient(
+        180deg,
+        rgba(21, 38, 113, 1) 0%,
+        rgba(21, 38, 113, 0) 100%
+    );
+
+    // Semantic Palette
+    --color-green: rgb(34, 197, 94);
+    --color-green-light: rgb(74, 222, 128);
+    --color-green-success: rgb(22, 163, 74);
+    --color-orange: rgb(217, 119, 6);
+    --color-yellow: rgb(245, 158, 11);
+    --color-red: rgb(239, 68, 68);
+    --color-purple: rgba(175, 190, 255, 0.9);
+    --color-purple-light: rgba(175, 190, 255, 0.5);
+    --color-purple-solid: rgb(139, 92, 246);
+    --color-cyan: rgb(6, 182, 212);
+    --color-blue-soft: rgb(235, 237, 255);
+    --color-neutral-muted: rgb(156, 163, 175);
+    --color-neutral-soft: rgb(223, 223, 224);
+    --color-terminal-red: rgb(255, 95, 87);
+    --color-terminal-red-border: rgb(224, 68, 62);
+    --color-terminal-yellow: rgb(254, 188, 46);
+    --color-terminal-yellow-border: rgb(214, 158, 42);
+    --color-terminal-green: rgb(40, 200, 64);
+    --color-terminal-green-border: rgb(39, 174, 55);
+
+    // Layout Widths (Inject Sass vars)
+    --max-width: #{$max-width};
+    --content-width: #{$content-width};
+    --hub-width: #{$hub-width};
+    --docs-width: #{$docs-width};
+    --docs-sidebar-width: #{$docs-sidebar-width};
+    --container-golden: 55.625rem; // 890px
+    --container-padding-mobile: var(--space-3);
+    --container-padding-tablet: var(--space-4);
+    --container-padding-desktop: var(--space-5);
+    --mobile-nav-clearance: var(--space-8);
+    --breakpoint-tablet: #{$tablet};
+    --breakpoint-desktop: #{$desktop};
+
+    // Spacing (8px Grid)
+    --space-0: 0rem;
+    --space-1: 0.25rem; // 4px
+    --space-2: 0.5rem; // 8px
+    --space-3: 1rem; // 16px
+    --space-4: 1.5rem; // 24px
+    --space-5: 2rem; // 32px
+    --space-6: 3rem; // 48px
+    --space-7: 4rem; // 64px
+    --space-8: 6rem; // 96px
+    --space-9: 8rem; // 128px
+
+    // Typography (Major Third 1.25 Scale)
+    --font-size-sm: 0.8rem; // 12.8px
+    --font-size-ui: 0.875rem; // 14px
+    --font-size-base: 1rem; // 16px
+    --font-size-md: 1.25rem; // 20px
+    --font-size-lg: 1.563rem; // 25px
+    --font-size-xl: 1.953rem; // 31.25px
+    --font-size-2xl: 2.441rem; // 39.06px
+    --font-size-3xl: 3.052rem; // 48.83px
+    --font-size-4xl: 3.815rem; // 61.04px
+    --font-size-5xl: 4.768rem; // 76.29px
+    --font-size-6xl: 5.96rem; // 95.37px
+    --font-size-7xl: 7.451rem; // 119.21px
+    --font-size-8xl: 9.313rem; // 149.01px
+    --font-size-xxl: var(--font-size-2xl);
+    --font-size-code: 0.9em;
+
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-xxl: 1.5rem;
+    --radius-pill: 9999px;
+
+    // Motion
+    --duration-fast: 0.2s;
+    --duration-base: 0.3s;
+    --duration-image: 0.25s;
+    --duration-instant: 0.08s;
+    --duration-quick: 0.15s;
+    --duration-hero: 0.16s;
+    --duration-reveal: 0.72s;
+    --duration-slow: 0.5s;
+    --duration-pulse: 2s;
+    --translate-nudge: var(--space-1);
+    --scale-hover: 1.1;
+    --scale-ping: 2;
+
+    // Effects
+    --border-hairline: 1px;
+    --border-focus: 2px;
+    --border-focus-strong: 3px;
+    --outline-offset: 2px;
+    --shadow-image-hover: 0 10px 28px rgba(0, 0, 0, 0.24);
+    --shadow-soft: 0 4px 12px rgba(59, 130, 246, 0.3);
+    --shadow-soft-hover: 0 6px 16px rgba(59, 130, 246, 0.4);
+    --shadow-card: 0 14px 24px rgba(0, 0, 0, 0.16);
+    --shadow-code:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-popover: 0 10px 15px -3px rgba(0, 0, 0, 0.25);
+    --shadow-terminal: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-gallery: 0 12px 40px rgba(0, 0, 0, 0.4);
+    --shadow-gallery-large: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-nav: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --blur-card-glow: 80px;
+    --blur-glass: 12px;
+    --perspective-project: 1200px;
+
+    // Syntax and UI colors
+    --color-link-marker: rgb(96, 165, 250);
+    --color-code-comment: rgb(107, 114, 128);
+    --color-code-keyword: rgb(147, 197, 253);
+    --color-code-name: rgb(250, 204, 21);
+    --color-code-string: rgb(134, 239, 172);
+    --color-code-number: rgb(249, 168, 212);
+    --color-important: rgb(139, 92, 246);
+    --color-inline-code: rgb(255, 122, 178);
+    --color-code-text: rgb(223, 223, 224);
+    --color-code-muted: rgba(255, 255, 255, 0.6);
+    --color-code-operator: rgba(255, 255, 255, 0.72);
+    --color-code-panel: rgba(10, 14, 23, 0.3);
+    --color-border-hover: rgba(255, 255, 255, 0.22);
+    --color-border-soft: rgba(255, 255, 255, 0.18);
+    --color-border-subtle: rgba(255, 255, 255, 0.05);
+    --color-divider: rgba(255, 255, 255, 0.2);
+    --color-callout-info-border: rgba(59, 130, 246, 0.3);
+    --color-callout-info-bg: rgba(59, 130, 246, 0.05);
+    --color-callout-success-border: rgba(16, 185, 129, 0.3);
+    --color-callout-success-bg: rgba(16, 185, 129, 0.05);
+    --color-callout-warning-border: rgba(245, 158, 11, 0.3);
+    --color-callout-warning-bg: rgba(245, 158, 11, 0.05);
+    --color-callout-danger-border: rgba(239, 68, 68, 0.3);
+    --color-callout-danger-bg: rgba(239, 68, 68, 0.05);
+    --color-callout-note-border: rgba(139, 92, 246, 0.3);
+    --color-callout-note-bg: rgba(139, 92, 246, 0.05);
+    --color-callout-tip-border: rgba(6, 182, 212, 0.3);
+    --color-callout-tip-bg: rgba(6, 182, 212, 0.05);
+    --status-default-bg: rgba(59, 130, 246, 0.16);
+    --status-default-text: rgb(191, 219, 254);
+    --status-default-border: rgba(59, 130, 246, 0.28);
+    --status-active-bg: rgba(34, 197, 94, 0.16);
+    --status-active-text: rgb(187, 247, 208);
+    --status-active-border: rgba(34, 197, 94, 0.32);
+    --status-deprecated-bg: rgba(245, 158, 11, 0.16);
+    --status-deprecated-text: rgb(253, 230, 138);
+    --status-deprecated-border: rgba(245, 158, 11, 0.34);
+    --status-archived-bg: rgba(148, 163, 184, 0.14);
+    --status-archived-text: rgb(203, 213, 225);
+    --status-archived-border: rgba(148, 163, 184, 0.28);
+    --status-maintenance-bg: rgba(86, 105, 189, 0.18);
+    --status-maintenance-text: rgb(219, 227, 255);
+    --status-maintenance-border: rgba(86, 105, 189, 0.34);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --sky-start: rgb(2, 8, 33);
+        --sky-mid: rgb(5, 15, 59);
+        --sky-end: rgb(21, 53, 162);
+
+        --sky-gradient: linear-gradient(
+            180deg,
+            var(--sky-start) 10%,
+            var(--sky-mid) 30%,
+            var(--sky-end) 100%
+        );
+
+        --header-gradient: linear-gradient(
+            180deg,
+            rgba(2, 8, 33, 1) 0%,
+            rgba(2, 8, 33, 0) 100%
+        );
+    }
+}

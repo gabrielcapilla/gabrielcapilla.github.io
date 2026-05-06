@@ -1,6 +1,7 @@
 ---
 title: Status Commands
 slug: status-commands
+project: dotman
 category: Commands
 order: 11
 ---

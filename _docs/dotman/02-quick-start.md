@@ -1,6 +1,7 @@
 ---
 title: Quick Start
 slug: quick-start
+project: dotman
 category: Getting Started
 order: 2
 ---

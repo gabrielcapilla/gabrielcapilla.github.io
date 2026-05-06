@@ -7,21 +7,21 @@
         </div>
 
         <div class="footer-col">
-            <h4>Projects</h4>
+            <div class="footer-heading">Projects</div>
             <ul class="footer-links">
+                {% assign footer_projects = site.projects | sort: "title" %}
+                {% for project in footer_projects %}
                 <li>
-                    <a href="{{ '/projects/dotman/' | relative_url }}"
-                        >dotman</a
-                    >
+                    <a href="{{ project.url | relative_url }}">{{ project.display_title | default: project.title }}</a>
                 </li>
-                <li class="disabled">Parun</li>
+                {% endfor %}
             </ul>
         </div>
 
         <div class="footer-col">
-            <h4>Explore</h4>
+            <div class="footer-heading">Explore</div>
             <ul class="footer-links">
-                {% for link in site.data.navigation.main %}
+                {% for link in site.data.navigation.menus.main %}
                 <li>
                     <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
                 </li>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="footer-col">
-            <h4>Connect</h4>
+            <div class="footer-heading">Connect</div>
             <ul class="footer-links">
                 {% for social in site.data.social.social %}
                 <li>
@@ -46,4 +46,13 @@
             </ul>
         </div>
     </div>
+
+    {% if page.uses_splide or layout.uses_splide %}
+    <!-- Splide.js (Slider/Carousel Library) -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"
+        crossorigin="anonymous"
+        defer
+    ></script>
+    {% endif %}
 </footer>

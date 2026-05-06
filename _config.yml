@@ -1,16 +1,63 @@
-title: Gabriel Capilla
-description: Open Source Enthusiast
+#-------------------------------
+# General Site Settings
+#-------------------------------
+title: gabrielcapilla
+description: Open Source Enthusiast & Software Developer
 url: "https://gabrielcapilla.github.io"
 baseurl: ""
+lang: en
 theme: null
+
+#-------------------------------
+# Social Media (for SEO tags)
+#-------------------------------
+twitter:
+  card: summary_large_image
+
+social:
+  name: Gabriel Capilla
+  links:
+    - https://github.com/gabrielcapilla
+
+#-------------------------------
+# SEO Plugin Settings
+#-------------------------------
+# Webmaster Verification
+# google_site_verification: "" # Add your Google verification code
+# bing_site_verification: "" # Add your Bing verification code
+
+# Default OpenGraph Image
+logo: /preview.webp
+
+#-------------------------------
+# Build Settings
+#-------------------------------
+markdown: kramdown
+highlighter: rouge
 
 sass:
   style: compressed
   sass_dir: _sass
 
+#-------------------------------
+# Plugins (GitHub Pages compatible)
+#-------------------------------
 plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-sitemap
   - jekyll-redirect-from
+  - jekyll-paginate
 
+#-------------------------------
+# Pagination Settings
+#-------------------------------
+paginate: 8
+paginate_path: "/blog/page/:num"
+
+#-------------------------------
+# Collections
+#-------------------------------
 collections:
   docs:
     output: false
@@ -19,13 +66,40 @@ collections:
     output: true
     permalink: /projects/:slug/
 
+#-------------------------------
+# Front Matter Defaults
+#-------------------------------
 defaults:
+  # Default layout for all pages
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+  # Docs collection defaults
   - scope:
       path: "_docs/dotman"
     values:
       project: "dotman"
       layout: "documentation"
 
+  # Projects collection defaults
+  - scope:
+      type: "projects"
+    values:
+      layout: "project"
+      seo_description_max_words: 35
+
+  # Posts collection defaults (if you add posts later)
+  - scope:
+      type: "posts"
+    values:
+      layout: "post"
+      nav_menu: "writing"
+
+#-------------------------------
+# Includes & Excludes
+#-------------------------------
 include:
   - _pages
 
@@ -35,3 +109,11 @@ exclude:
   - package-lock.json
   - .gitignore
   - ORIGINAL
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - .github
+  - .sass-cache
+  - .jekyll-cache
+  - scripts

@@ -1,29 +1,46 @@
 ---
 ---
 
-// 1. Abstracts (Variables, Mixins) - NO generate CSS, only configuration
-@import "abstracts/variables";
-@import "abstracts/mixins";
+// 7-1 ITCSS Architecture (Inverted Triangle CSS)
+// Imports are ordered by specificity, from most global to most specific
 
-// 2. Base (Reset, Typography, Utilities)
-@import "base/reset";
-@import "base/typography";
-@import "base/utilities";
+// 0. Settings (Variables, mixins, functions) - NO CSS output
+@import "0-settings/variables";
+@import "0-settings/mixins";
 
-// 3. Layout (Macro structure)
-@import "layouts/grid";
-@import "layouts/hub";
-@import "layouts/docs";
-@import "layouts/post";
-@import "layouts/navbar";
-@import "layouts/footer";
+// 1. Tools (Reset, normalize, utilities, syntax highlighting)
+@import "1-tools/reset";
+@import "1-tools/utilities";
+@import "1-tools/splide";
 
-// 4. Components (Reusable blocks)
-@import "components/buttons";
-@import "components/cards";
-@import "components/icons";
-@import "components/terminal";
-@import "components/lists";
-@import "components/code";
-@import "components/hero";
-@import "components/article";
+// 2. Base (HTML elements, typography)
+@import "2-base/typography";
+
+// 3. Modules (Reusable components - buttons, cards, forms)
+@import "3-modules/buttons";
+@import "3-modules/forms";
+@import "3-modules/cards";
+@import "3-modules/icons";
+@import "3-modules/terminal";
+@import "3-modules/lists";
+@import "3-modules/code";
+@import "3-modules/hero";
+@import "3-modules/article";
+@import "3-modules/lazy-load";
+@import "3-modules/tables";
+@import "3-modules/quotes";
+@import "3-modules/callouts";
+@import "3-modules/videos";
+@import "3-modules/faq";
+@import "3-modules/testimonials";
+@import "3-modules/gallery";
+@import "3-modules/pagination";
+@import "3-modules/elements";
+
+// 4. Layouts (Page-level structures)
+@import "4-layouts/grid";
+@import "4-layouts/hub";
+@import "4-layouts/docs";
+@import "4-layouts/post";
+@import "4-layouts/navbar";
+@import "4-layouts/footer";

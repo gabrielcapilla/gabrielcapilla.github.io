@@ -1,0 +1,264 @@
+.terminal-wrapper {
+    width: 100%;
+    max-width: 56rem;
+    margin-top: var(--space-7);
+    padding: 0 var(--space-3);
+}
+
+.terminal {
+    background: var(--text-white);
+    border-radius: var(--space-2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    font-family: var(--font-mono);
+    text-align: left;
+}
+
+.terminal-header {
+    background: rgb(243, 244, 246);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: var(--border-hairline) solid rgb(229, 231, 235);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.window-controls {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.dot {
+    width: var(--radius-lg);
+    height: var(--radius-lg);
+    border-radius: 50%;
+    border: var(--border-hairline) solid rgba(0, 0, 0, 0.1);
+}
+
+.dot.red {
+    background: var(--color-terminal-red);
+    border-color: var(--color-terminal-red-border);
+}
+
+.dot.yellow {
+    background: var(--color-terminal-yellow);
+    border-color: var(--color-terminal-yellow-border);
+}
+
+.dot.green {
+    background: var(--color-terminal-green);
+    border-color: var(--color-terminal-green-border);
+}
+
+.terminal-title {
+    color: var(--color-code-comment);
+    font-size: var(--font-size-ui);
+    font-family: var(--font-sans);
+    font-weight: 500;
+}
+
+.terminal-header-spacer {
+    width: 3.5rem;
+}
+
+.terminal-body {
+    padding: var(--space-4);
+    font-size: var(--font-size-ui);
+    color: rgb(31, 41, 55);
+}
+
+.cmd-line {
+    margin-bottom: var(--space-3);
+}
+
+.cmd-prompt {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+}
+
+.prompt-arrow {
+    color: var(--color-green-success);
+    font-weight: bold;
+}
+
+.prompt-tilde {
+    color: rgb(37, 99, 235);
+    font-weight: bold;
+}
+
+.terminal-path {
+    color: var(--color-orange);
+}
+
+.terminal-muted {
+    color: var(--color-neutral-muted);
+    font-style: italic;
+}
+
+.terminal-success {
+    color: var(--color-green-success);
+}
+
+.cmd-output {
+    padding-left: var(--space-3);
+    color: var(--color-code-comment);
+}
+
+.cursor {
+    display: inline-block;
+    width: var(--space-2);
+    height: 1.25rem;
+    background: var(--color-neutral-muted);
+    animation: pulse var(--duration-pulse) infinite;
+    vertical-align: middle;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.code-box-display {
+    background: var(--bg-dark);
+    border: var(--border-hairline) solid var(--border-color);
+    border-radius: var(--space-3);
+    padding: var(--space-5);
+    margin: var(--space-5) auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    cursor: pointer;
+    transition: border-color var(--duration-fast);
+    width: 100%;
+    max-width: 48rem;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.code-box-display:hover {
+    border-color: var(--color-divider);
+}
+
+.code-content {
+    font-family: var(--font-mono);
+    text-align: left;
+    overflow-x: auto;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+}
+
+// Mobile fix: truncate code box with gradient fade on small screens
+// Industry standard: show truncated content with gradient fade indicator
+@media (max-width: 480px) {
+    .code-box-display {
+        padding: var(--space-3);
+        margin: var(--space-3) auto;
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .code-content {
+        white-space: nowrap; // Keep single line
+        overflow: hidden; // Hide overflow
+        text-overflow: ellipsis; // Show "..." at end
+        max-width: 100%;
+    }
+
+    // Add gradient fade to indicate more content
+    .code-box-display::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: var(--space-7);
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            transparent 0%,
+            var(--color-code-panel) 40%,
+            var(--bg-dark) 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    // Ensure tooltip stays above gradient
+    .tooltip {
+        z-index: 2;
+    }
+}
+
+.yellow {
+    color: var(--color-code-name);
+}
+
+.gray {
+    color: var(--color-code-comment);
+}
+
+.copy-icon {
+    color: var(--text-muted);
+}
+
+.code-box-display:hover .copy-icon {
+    color: var(--text-white);
+}
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--text-white);
+    color: var(--primary-blue);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-ui);
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-fast);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    white-space: nowrap;
+}
+
+.tooltip::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23152671' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.tooltip.show {
+    opacity: 1;
+}
+
+.nimble-box {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--surface-glass-strong);
+    border: var(--border-hairline) solid var(--border-color);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--space-2);
+    font-family: var(--font-mono);
+    margin-left: var(--space-2);
+    cursor: pointer;
+    position: relative;
+}

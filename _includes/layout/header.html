@@ -1,43 +1,96 @@
 <header class="navbar">
     <nav class="nav-container">
         {% assign menu_key = page.nav_menu | default: 'hub' %}
-        {% assign menu_items = site.data.navigation.menus[menu_key] %}
+        {% assign menu_items = site.data.navigation.menus[menu_key] | default: empty %}
+        {% assign project_key = page.project | default: nil %}
+        {% if project_key == nil and page.collection == 'projects' %}
+            {% assign project_key = page.slug %}
+        {% endif %}
 
-        {% if menu_key == 'dotman' %}
+        {% if project_key %}
+            {% assign current_project = site.projects | where: "slug", project_key | first %}
+            {% assign project_docs = site.docs | where: "project", project_key | default: empty %}
+            {% if current_project.url %}
+                {% assign project_home_url = current_project.url %}
+            {% else %}
+                {% assign project_home_url = '/projects/' | append: project_key | append: '/' %}
+            {% endif %}
+            {% if current_project.docs_url %}
+                {% assign project_docs_url = current_project.docs_url %}
+            {% else %}
+                {% assign project_docs_url = project_home_url | append: 'docs/' %}
+            {% endif %}
+            {% assign project_repository = current_project.repository | default: current_project.github_url %}
+            {% assign repository_stats = site.data.github_repositories[project_key] %}
+            {% assign stars_enabled = site.data.settings.projects.github_stars.enable | default: true %}
+            {% assign navbar_stars_enabled = site.data.settings.projects.github_stars.show_in_navbar | default: true %}
+            {% if current_project.github_stars.show_in_navbar == false %}
+                {% assign navbar_stars_enabled = false %}
+            {% endif %}
+        {% endif %}
+
+        {% if project_key %}
         <a href="{{ '/' | relative_url }}" class="logo-btn">
-            <span class="logo-text" style="font-family: var(--font-mono); font-weight: 700">~ dotman</span>
-            <span class="hidden-mobile" style="font-size: 0.875rem; color: var(--text-muted-darker); font-family: var(--font-mono); margin-left: 0.5rem; font-weight: 400">
-                / projects / dotman
+            <span class="logo-text">{{ current_project.nav_icon | default: '~' }} {{ current_project.display_title | default: current_project.title | default: project_key }}</span>
+            <span class="logo-context hidden-mobile">
+                / projects / {{ project_key }}
             </span>
         </a>
         {% else %}
         <a href="{{ '/' | relative_url }}" class="logo-btn">
-            <span class="logo-text" style="font-family: var(--font-mono); font-weight: 700">~ gabrielcapilla</span>
+            <span class="logo-text">~ {{ site.title | default: 'gabrielcapilla' }}</span>
             {% if page.layout == 'post' %}
-            <span class="hidden-mobile" style="font-size: 0.875rem; color: var(--text-muted-darker); font-family: var(--font-mono); margin-left: 0.5rem; font-weight: 400">
+            <span class="logo-context hidden-mobile">
                 / writing
             </span>
             {% endif %}
         </a>
         {% endif %}
 
-        <div class="hidden-mobile" style="gap: 1rem; align-items: center">
+        <div class="nav-links hidden-mobile">
+            {% if project_key %}
+                <a href="{{ '/' | relative_url }}" class="nav-link nav-link--muted">
+                    Back to Hub
+                </a>
+                <div class="nav-divider"></div>
+                <a href="{{ project_home_url | relative_url }}" class="nav-link {% if page.url == project_home_url %}active{% endif %}">
+                    Overview
+                </a>
+                {% if project_docs.size > 0 or current_project.docs_url %}
+                <a href="{{ project_docs_url | relative_url }}" class="nav-link {% if page.layout == 'documentation' %}active{% endif %}">
+                    Docs
+                </a>
+                {% endif %}
+                {% if project_repository %}
+                <a href="{{ project_repository }}" class="nav-link" target="_blank" rel="noopener" aria-label="GitHub repository">
+                    {% include components/icon.html name='github' %}
+                </a>
+                {% endif %}
+            {% else %}
             {% for link in menu_items %}
             {% if link.icon and link.title == 'Back to Hub' %}
-                <a href="{{ link.url | relative_url }}" class="nav-link" style="color: var(--text-muted)">
+                <a href="{{ link.url | relative_url }}" class="nav-link nav-link--muted">
                     {{ link.title }}
                 </a>
-                <div style="width: 1px; height: 1rem; background: rgba(255, 255, 255, 0.2);"></div>
+                <div class="nav-divider"></div>
             {% elsif link.icon and link.title != 'Back to Hub' %}
-                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url %}active{% endif %}">
+                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url or page.layout == 'post' and link.url == '/writing/' %}active{% endif %}" aria-label="{{ link.title }}" {% if link.url contains 'http' %}target="_blank" rel="noopener"{% endif %}>
                     {% include components/icon.html name=link.icon %}
                 </a>
             {% else %}
-                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url %}active{% endif %}">
+                <a href="{{ link.url | relative_url }}" class="nav-link {% if page.url == link.url or page.layout == 'post' and link.url == '/writing/' %}active{% endif %}">
                     {{ link.title }}
                 </a>
             {% endif %}
             {% endfor %}
+
+            <!-- CTA Button -->
+            {% if site.data.settings.cta_button.enable == true %}
+            <a href="{{ site.data.settings.cta_button.link | relative_url }}" class="cta-button">
+                {{ site.data.settings.cta_button.text }}
+            </a>
+            {% endif %}
+            {% endif %}
         </div>
     </nav>
 </header>
@@ -47,10 +100,26 @@
         {% assign mobile_menu_key = page.nav_menu | default: 'hub' %}
         {% assign mobile_menu_items = site.data.navigation.mobile[mobile_menu_key] %}
 
+        {% if project_key %}
+        <a href="{{ project_home_url | relative_url }}" class="{% if page.url == project_home_url %}active{% endif %}" aria-label="Overview">
+            {% include components/icon.html name='terminal' %}
+        </a>
+        {% if project_docs.size > 0 or current_project.docs_url %}
+        <a href="{{ project_docs_url | relative_url }}" class="{% if page.layout == 'documentation' %}active{% endif %}" aria-label="Docs">
+            {% include components/icon.html name='book' %}
+        </a>
+        {% endif %}
+        {% if project_repository %}
+        <a href="{{ project_repository }}" aria-label="GitHub" target="_blank" rel="noopener">
+            {% include components/icon.html name='github' %}
+        </a>
+        {% endif %}
+        {% else %}
         {% for link in mobile_menu_items %}
-        <a href="{{ link.url | relative_url }}" class="{% if page.url == link.url %}active{% endif %}" aria-label="{{ link.title }}" {% if link.url contains 'http' %}target="_blank"{% endif %}>
+        <a href="{{ link.url | relative_url }}" class="{% if page.url == link.url or page.layout == 'post' and link.url == '/writing/' %}active{% endif %}" aria-label="{{ link.title }}" {% if link.url contains 'http' %}target="_blank" rel="noopener"{% endif %}>
             {% include components/icon.html name=link.icon %}
         </a>
         {% endfor %}
+        {% endif %}
     </nav>
 </div>

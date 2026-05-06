@@ -1,0 +1,29 @@
+{% if paginator.total_pages > 1 %}
+<!-- begin pagination -->
+<div class="pagination-container">
+    <div class="pagination">
+        {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path }}" class="pagination-link pagination-prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                </svg>
+                Previous
+            </a>
+        {% endif %}
+
+        <div class="pagination-pages">
+            Page {{ paginator.page }} of {{ paginator.total_pages }}
+        </div>
+
+        {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path }}" class="pagination-link pagination-next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+        {% endif %}
+    </div>
+</div>
+<!-- end pagination -->
+{% endif %}

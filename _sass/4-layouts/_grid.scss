@@ -1,0 +1,119 @@
+// 1. Hub & General Pages Container (Original: 1200px)
+// Applies to: Home, Projects List, Writing List
+.site-container,
+.hub-container,
+.post-container,
+.container {
+    width: 100%;
+    max-width: var(--hub-width);
+    margin: 0 auto;
+    padding: var(--space-6) var(--container-padding-mobile) var(--space-8);
+    animation: fadeIn var(--duration-slow) ease-out forwards;
+
+    @include tablet {
+        padding-inline: var(--container-padding-tablet);
+    }
+
+    @include desktop {
+        padding-inline: var(--container-padding-desktop);
+    }
+}
+
+// 2. Docs Container (Original: 1400px)
+// Applies to: Documentation (wider for sidebar + content)
+.docs-container {
+    display: grid;
+    grid-template-columns: var(--docs-sidebar-width) minmax(0, 1fr);
+    gap: var(--space-7);
+    width: 100%;
+    max-width: var(--docs-width);
+    margin: 0 auto;
+    padding: var(--space-6) var(--container-padding-mobile) var(--space-8);
+
+    @include tablet {
+        padding-inline: var(--container-padding-tablet);
+    }
+
+    @include desktop {
+        padding-inline: var(--container-padding-desktop);
+    }
+}
+
+// Mobile: remove flex and gap to prevent horizontal scroll
+@media (max-width: 1023px) {
+    .docs-container {
+        display: block;
+        gap: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+// Section Styling
+.section-header {
+    font-size: var(--font-size-sm);
+    font-family: var(--font-mono);
+    color: var(--text-muted-darker);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.page-header {
+    margin-bottom: var(--space-6);
+}
+
+.page-title {
+    color: var(--text-white);
+    font-size: var(--font-size-xxl);
+    font-weight: 500;
+    line-height: 1.08;
+    margin: 0;
+
+    @include tablet {
+        font-size: var(--space-6);
+    }
+}
+
+.page-description {
+    color: var(--text-muted);
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+    max-width: 42rem;
+    margin-top: var(--space-4);
+}
+
+.section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-9);
+}
+
+// Projects Grid
+.projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+
+    @include tablet {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.empty-state {
+    padding: var(--space-8) 0;
+    color: var(--text-muted);
+    text-align: center;
+}

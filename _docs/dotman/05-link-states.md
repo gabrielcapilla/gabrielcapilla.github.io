@@ -1,6 +1,7 @@
 ---
 title: Link States
 slug: link-states
+project: dotman
 category: Core Concepts
 order: 5
 ---
@@ -9,21 +10,21 @@ order: 5
 
 The `status` command shows the state of each file in your profiles:
 
-<div style="margin-bottom: 2rem;">
+<div class="status-list">
     <div class="status-item">
         <div class="status-dot bg-green"></div>
-        <p style="margin: 0; color: var(--text-muted);"><strong style="color: white;">Linked</strong> - The file is properly symlinked from the profile to the system</p>
+        <p><strong>Linked</strong> - The file is properly symlinked from the profile to the system</p>
     </div>
     <div class="status-item">
         <div class="status-dot bg-yellow"></div>
-        <p style="margin: 0; color: var(--text-muted);"><strong style="color: white;">NotLinked</strong> - The file exists in the profile but is not symlinked</p>
+        <p><strong>NotLinked</strong> - The file exists in the profile but is not symlinked</p>
     </div>
     <div class="status-item">
         <div class="status-dot bg-red"></div>
-        <p style="margin: 0; color: var(--text-muted);"><strong style="color: white;">Conflict</strong> - A file exists at the target location but is not managed by dotman</p>
+        <p><strong>Conflict</strong> - A file exists at the target location but is not managed by dotman</p>
     </div>
     <div class="status-item">
         <div class="status-dot bg-purple"></div>
-        <p style="margin: 0; color: var(--text-muted);"><strong style="color: white;">OtherProfile</strong> - The file is linked to another profile</p>
+        <p><strong>OtherProfile</strong> - The file is linked to another profile</p>
     </div>
 </div>

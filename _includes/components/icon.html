@@ -14,6 +14,23 @@
     <path
         d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
     ></path>
+    {% when 'star' %}
+    <polygon
+        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+    ></polygon>
+    {% when 'spark' %}
+    <path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"></path>
+    <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"></path>
+    {% when 'boxes' %}
+    <path d="M7 7.5 12 5l5 2.5v5L12 15l-5-2.5v-5z"></path>
+    <path d="M2 14.5 7 12l5 2.5v5L7 22l-5-2.5v-5z"></path>
+    <path d="M12 14.5 17 12l5 2.5v5L17 22l-5-2.5v-5z"></path>
+    {% when 'command' %}
+    <path d="M9 9H5.5A3.5 3.5 0 1 1 9 5.5V9z"></path>
+    <path d="M15 9h3.5A3.5 3.5 0 1 0 15 5.5V9z"></path>
+    <path d="M9 15H5.5A3.5 3.5 0 1 0 9 18.5V15z"></path>
+    <path d="M15 15h3.5A3.5 3.5 0 1 1 15 18.5V15z"></path>
+    <path d="M9 9h6v6H9z"></path>
     {% when 'arrow-left' %}
     <line x1="19" y1="12" x2="5" y2="12"></line>
     <polyline points="12 19 5 12 12 5"></polyline>
@@ -72,6 +89,28 @@
     <circle cx="18" cy="19" r="3"></circle>
     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    {% when 'email' %}
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+    <polyline points="22 6 12 13 2 6"></polyline>
+    {% when 'check' %}
+    <polyline points="20 6 9 17 4 12"></polyline>
+    {% when 'plus' %}
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+    {% when 'minus' %}
+    <line x1="5" y1="12" x2="19" y2="12"></line>
+    {% when 'x-twitter' %}
+    <path d="M4 4l16 16"></path>
+    <path d="M20 4L4 20"></path>
+    {% when 'facebook' %}
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+    {% when 'linkedin' %}
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+    {% when 'whatsapp' %}
+    <path d="M3 21l1.65-4.8A8.5 8.5 0 1 1 8 19.35L3 21z"></path>
+    <path d="M9.5 8.5c.3 2.8 2.2 4.7 5 5"></path>
     {% else %}
     <circle cx="12" cy="12" r="10"></circle>
     {% endcase %}

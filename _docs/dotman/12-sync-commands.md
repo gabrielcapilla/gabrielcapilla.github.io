@@ -1,6 +1,7 @@
 ---
 title: Sync Commands
 slug: sync-commands
+project: dotman
 category: Commands
 order: 12
 ---

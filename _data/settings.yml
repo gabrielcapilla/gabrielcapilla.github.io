@@ -1,0 +1,185 @@
+#-------------------------------
+# Site Settings
+#-------------------------------
+title: Gabriel Capilla
+description: Open Source Enthusiast & Software Developer
+color_scheme: auto # Options: auto, light, dark
+
+#-------------------------------
+# Author Settings
+#-------------------------------
+author:
+  name: Gabriel Capilla
+  role: Software Developer
+  email: ""
+
+#-------------------------------
+# Navigation Settings
+#-------------------------------
+navigation:
+  menu_items:
+    - title: "Home"
+      url: "/"
+    - title: "Projects"
+      url: "/projects/"
+    - title: "Docs"
+      url: "/docs/"
+
+#-------------------------------
+# Call to Action Button
+#-------------------------------
+cta_button:
+  enable: false
+  link: "/contact/"
+  text: "Get in Touch"
+
+#-------------------------------
+# Social Links
+#-------------------------------
+social:
+  - {
+      icon: "fa-brands fa-github",
+      name: "GitHub",
+      link: "https://github.com/gabrielcapilla",
+    }
+  - {
+      icon: "fa-brands fa-x-twitter",
+      name: "Twitter",
+      link: "https://twitter.com",
+    }
+  - {
+      icon: "fa-brands fa-linkedin",
+      name: "LinkedIn",
+      link: "https://linkedin.com",
+    }
+
+#-------------------------------
+# Contact Settings
+#-------------------------------
+contact:
+  email: ""
+  description: Feel free to reach out for collaborations or questions.
+  form_id: "" # Add a Formspree form id to enable the contact form.
+
+#-------------------------------
+# Analytics (Optional)
+#-------------------------------
+google_analytics: "" # Add your GA Tracking ID, e.g., "UA-XXXXX-Y"
+
+#-------------------------------
+# Projects Section
+#-------------------------------
+projects:
+  enable: true
+  title: Featured Projects
+  description: A showcase of my open source contributions and personal projects.
+  github_stars:
+    enable: true
+    show_in_navbar: true
+    show_in_cards: true
+
+#-------------------------------
+# Documentation Section
+#-------------------------------
+docs:
+  enable: true
+  title: Documentation
+  description: Comprehensive documentation for my projects and tools.
+
+#-------------------------------
+# FAQ Section
+#-------------------------------
+faq:
+  enable: true
+  title: Questions? <em>Answers</em>.
+  description: Find solutions to common queries here.
+
+faq_items:
+  - title: What are your main areas of expertise?
+    description: My specialization includes software development, open source contributions, and building developer tools. I'm passionate about clean code, performance optimization, and creating intuitive user experiences.
+  - title: Can you provide examples of your work?
+    description: Yes, on my website you can find a portfolio with examples of my projects, documentation for various tools I've created, and blog posts about software development best practices.
+  - title: What is your experience with various platforms?
+    description: I have extensive experience working with various platforms, including web applications, command-line tools, and desktop applications. I'm comfortable with Linux environments and containerized deployments.
+  - title: What tools and software do you use?
+    description: I work with tools such as Jekyll for static sites, Git for version control, Docker for containerization, and various programming languages including JavaScript, Python, and Rust.
+  - title: How long does it take to complete a project?
+    description: The development time depends on the complexity of the project. Usually, creating a fully functional tool or application takes from several weeks to several months, depending on scope and requirements.
+  - title: How can I contact you?
+    description: You can contact me through the contact form on my website or directly via email. I'm always open to new projects and ready to discuss your ideas or potential collaborations.
+
+#-------------------------------
+# Testimonials Section
+#-------------------------------
+testimonials:
+  enable: true
+  title: Trusted by <em>Professionals</em>
+  description: Join our community of developers and creators where you can develop your talents and reach new heights.
+
+testimonial_items:
+  - name: Alex Johnson
+    image: "https://i.pravatar.cc/150?img=12"
+    designation: Senior Developer
+    content: Gabriel's attention to detail and commitment to clean code is exceptional. His tools have significantly improved our development workflow.
+  - name: Maria Garcia
+    image: "https://i.pravatar.cc/150?img=5"
+    designation: Tech Lead
+    content: Working with Gabriel was a pleasure. His expertise in open source and developer tools helped us accelerate our project timeline significantly.
+  - name: James Wilson
+    image: "https://i.pravatar.cc/150?img=8"
+    designation: DevOps Engineer
+    content: I cannot recommend Gabriel highly enough. His solutions are not only technically sound but also highly practical and easy to integrate.
+
+#-------------------------------
+# Gallery Section
+#-------------------------------
+gallery:
+  enable: true
+  title: A Visual Journey Through <em>My World</em>
+  description: Step into my visual world where each image tells a story. From code snippets to project screenshots, explore the moments that inspire and define my journey.
+  caption: Follow me on <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a> for more content.
+
+gallery_images:
+  - alt: "Coding Setup"
+    url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop"
+  - alt: "Team Collaboration"
+    url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
+  - alt: "Development Environment"
+    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop"
+  - alt: "Code Review"
+    url: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop"
+  - alt: "Conference Speaking"
+    url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop"
+
+#-------------------------------
+# Newsletter Subscribe Section
+#-------------------------------
+mailchimp:
+  enable: false
+  title: Subscribe to Our <em>Newsletter</em>
+  description: Join now and never miss out on updates, tutorials, and insights. Because you're worth it!
+  identifier: ""
+  input_text: "Your email address"
+  button_text: "Subscribe"
+
+#-------------------------------
+# Sidebar Section
+#-------------------------------
+sidebar:
+  title: One Stop Daily <em>News,</em> <em>Article,</em> <em>Inspiration</em>.
+  description: Welcome to a unique world of creativity and innovation! Here you'll find engaging articles, helpful tips, and captivating stories from the realms of design and development.
+  links:
+    - title: "GitHub"
+      url: "https://github.com/gabrielcapilla"
+      icon: "github"
+    - title: "Projects"
+      url: "/projects/"
+      icon: "layers"
+    - title: "Writing"
+      url: "/writing/"
+      icon: "pen"
+
+#-------------------------------
+# Comments (Disqus)
+#-------------------------------
+disqus_identifier: "" # Add your Disqus shortname

@@ -1,0 +1,22 @@
+# robots.txt for gabrielcapilla.github.io
+# Last updated: 2026-01-13
+
+# Allow all web crawlers to access this site
+User-agent: *
+
+# Disallow specific paths
+Disallow: /_site/
+Disallow: /assets/css/src/
+Disallow: /assets/js/src/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /node_modules/
+
+# Allow all other paths
+Allow: /
+
+# Sitemap location
+Sitemap: https://gabrielcapilla.github.io/sitemap.xml
+
+# Crawl-delay (optional, helps prevent server overload)
+# Crawl-delay: 1

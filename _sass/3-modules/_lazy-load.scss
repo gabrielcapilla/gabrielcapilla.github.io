@@ -1,0 +1,25 @@
+// Lazy Loading Styles
+// Fade-in effect for lazy-loaded images
+
+.lazy-load {
+    opacity: 0;
+    transition: opacity var(--duration-base) ease-in-out;
+
+    &[loading="eager"] {
+        opacity: 1;
+    }
+
+    &[loading="lazy"] {
+        will-change: opacity;
+
+        // Fade in when loaded
+        &:is([src], [srcset]) {
+            opacity: 1;
+        }
+    }
+
+    // Fallback for browsers without lazy loading support
+    @supports not (loading: lazy) {
+        opacity: 1;
+    }
+}

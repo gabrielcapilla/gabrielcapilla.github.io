@@ -1,0 +1,16 @@
+---
+layout: page
+---
+
+{% if page.status or page.repository %}
+<div class="project-meta" aria-label="Project metadata">
+    {% if page.status %}
+    <span>{{ page.status }}</span>
+    {% endif %}
+    {% if page.repository %}
+    <a href="{{ page.repository }}" target="_blank" rel="noopener">Repository</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{{ content }}

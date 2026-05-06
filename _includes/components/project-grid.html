@@ -1,0 +1,31 @@
+{% assign projects = include.projects | default: site.projects %}
+{% assign featured_only = include.featured_only | default: false %}
+{% assign home_only = include.home_only | default: false %}
+{% assign sort_by = include.sort_by %}
+{% assign limit = include.limit %}
+{% if sort_by %}
+    {% assign projects = projects | sort: sort_by %}
+{% endif %}
+
+<div class="projects-grid">
+    {% assign shown = 0 %}
+    {% for project in projects %}
+        {% if featured_only and project.featured != true %}
+            {% continue %}
+        {% endif %}
+        {% if home_only and project.show_on_home != true %}
+            {% continue %}
+        {% endif %}
+
+        {% assign shown = shown | plus: 1 %}
+        {% if limit and shown > limit %}
+            {% break %}
+        {% endif %}
+
+        {% include components/project-card.html project=project class="featured" %}
+    {% endfor %}
+
+    {% if shown == 0 %}
+    <div class="empty-state">No projects found.</div>
+    {% endif %}
+</div>

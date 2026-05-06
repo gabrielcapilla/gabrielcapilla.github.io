@@ -1,0 +1,86 @@
+.form-panel,
+.info-panel {
+    background: var(--surface-muted);
+    border: var(--border-hairline) solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+}
+
+.form-stack,
+.info-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.form-group label {
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.form-control,
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.875rem var(--space-3);
+    background: var(--surface-hover);
+    border: var(--border-hairline) solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-white);
+    font: inherit;
+    transition:
+        border-color var(--duration-fast),
+        box-shadow var(--duration-fast);
+}
+
+.form-control::placeholder,
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted-darker);
+}
+
+.form-control:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--sky-end);
+    box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.content-grid {
+    display: grid;
+    gap: var(--space-7);
+}
+
+@include desktop {
+    .content-grid--two {
+        grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.7fr);
+    }
+}
+
+.info-item {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+}
+
+.info-item h3 {
+    color: var(--text-white);
+    margin: 0 0 var(--space-2);
+}
+
+.info-item a,
+.info-item p {
+    color: var(--text-muted);
+}

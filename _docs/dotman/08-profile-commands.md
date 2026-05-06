@@ -1,6 +1,7 @@
 ---
 title: Profile Commands
 slug: profile-commands
+project: dotman
 category: Commands
 order: 8
 ---

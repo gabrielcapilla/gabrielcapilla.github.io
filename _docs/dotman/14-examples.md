@@ -1,6 +1,7 @@
 ---
 title: Examples
 slug: examples
+project: dotman
 category: Advanced
 order: 14
 ---

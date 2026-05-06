@@ -1,6 +1,7 @@
 ---
 title: Profiles
 slug: profiles
+project: dotman
 category: Core Concepts
 order: 6
 ---

@@ -1,20 +1,21 @@
 ---
 layout: default
+capabilities:
+    - copy
+    - smooth-scroll
 ---
 
 <div class="hub-container">
-    <div style="margin-bottom: 4rem">
+    <header class="page-header">
         {% if page.back_link %} {% include components/back-link.html url="/"
         text="Back to Hub" %} {% endif %}
 
-        <h1 class="hub-title" style="font-size: 3rem">{{ page.title }}</h1>
+        <h1 class="page-title">{{ page.title }}</h1>
 
         {% if page.description %}
-        <p class="hub-bio" style="font-size: 1.125rem">
-            {{ page.description }}
-        </p>
+        <p class="page-description">{{ page.description }}</p>
         {% endif %}
-    </div>
+    </header>
 
     {{ content }}
 </div>

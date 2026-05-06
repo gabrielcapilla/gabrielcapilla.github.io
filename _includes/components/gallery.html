@@ -1,0 +1,33 @@
+{% if site.data.settings.gallery.enable == true %}
+<!-- begin section gallery -->
+<section class="section-gallery">
+    <div class="gallery-container">
+        <div class="gallery-header">
+            {% if site.data.settings.gallery.title %}
+                <h2 class="gallery-title">{{ site.data.settings.gallery.title }}</h2>
+            {% endif %}
+            {% if site.data.settings.gallery.description %}
+                <p class="gallery-description">{{ site.data.settings.gallery.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="section-gallery__inner">
+            {% for image in site.data.settings.gallery_images %}
+            <div class="section-gallery__image">
+                <img src="{{ image.url | relative_url }}" alt="{{ image.alt }}" loading="lazy" decoding="async">
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if site.data.settings.gallery.caption %}
+        <div class="section-gallery__caption">
+            {{ site.data.settings.gallery.caption }}
+        </div>
+        {% endif %}
+    </div>
+</section>
+<!-- end section gallery -->
+
+<!-- Overlay for image zoom -->
+<div class="gallery-overlay"></div>
+{% endif %}

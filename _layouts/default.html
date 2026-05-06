@@ -1,13 +1,15 @@
 <!doctype html>
 <html lang="en">
     {% include layout/head.html %}
-    <body>
+    {% assign page_capabilities = page.capabilities | default: layout.capabilities | default: empty %}
+    <body data-capabilities="{{ page_capabilities | join: ',' }}">
         <div class="fixed-background"></div>
         <div class="site-wrapper">
             {% include layout/header.html %}
             <main>{{ content }}</main>
             {% include layout/footer.html %}
         </div>
-        <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+        <script src="{{ '/assets/js/reframe.js' | relative_url }}" defer></script>
+        <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
     </body>
 </html>

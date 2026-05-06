@@ -1,0 +1,120 @@
+/* Callouts/Admonitions Styling */
+.callout {
+    margin: var(--space-4) 0;
+    padding: 1.25rem var(--space-4);
+    border-radius: var(--space-2);
+    border: var(--border-hairline) solid transparent;
+    background: var(--surface-subtle);
+
+    .callout-title {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        font-weight: 600;
+        font-size: var(--space-3);
+        margin-bottom: var(--space-2);
+    }
+
+    .callout-content {
+        color: var(--text-muted);
+        font-size: var(--font-size-base);
+
+        p {
+            margin: 0;
+
+            & + p {
+                margin-top: var(--space-2);
+            }
+        }
+    }
+
+    .callout-icon {
+        font-size: var(--font-size-md);
+    }
+}
+
+/* Callout variants */
+.callout.info {
+    border-color: var(--color-callout-info-border);
+    background: var(--color-callout-info-bg);
+
+    .callout-title {
+        color: var(--primary-blue);
+    }
+
+    .callout-icon {
+        color: var(--primary-blue);
+    }
+}
+
+.callout.success {
+    border-color: var(--color-callout-success-border);
+    background: var(--color-callout-success-bg);
+
+    .callout-title {
+        color: var(--color-green);
+    }
+
+    .callout-icon {
+        color: var(--color-green);
+    }
+}
+
+.callout.warning {
+    border-color: var(--color-callout-warning-border);
+    background: var(--color-callout-warning-bg);
+
+    .callout-title {
+        color: var(--color-yellow);
+    }
+
+    .callout-icon {
+        color: var(--color-yellow);
+    }
+}
+
+.callout.danger {
+    border-color: var(--color-callout-danger-border);
+    background: var(--color-callout-danger-bg);
+
+    .callout-title {
+        color: var(--color-red);
+    }
+
+    .callout-icon {
+        color: var(--color-red);
+    }
+}
+
+.callout.note {
+    border-color: var(--color-callout-note-border);
+    background: var(--color-callout-note-bg);
+
+    .callout-title {
+        color: var(--color-purple-solid);
+    }
+
+    .callout-icon {
+        color: var(--color-purple-solid);
+    }
+}
+
+.callout.tip {
+    border-color: var(--color-callout-tip-border);
+    background: var(--color-callout-tip-bg);
+
+    .callout-title {
+        color: var(--color-cyan);
+    }
+
+    .callout-icon {
+        color: var(--color-cyan);
+    }
+}
+
+/* Responsive callouts */
+@media (max-width: 768px) {
+    .callout {
+        padding: var(--space-3);
+    }
+}

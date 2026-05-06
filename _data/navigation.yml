@@ -1,4 +1,14 @@
 menus:
+  main:
+    - title: Home
+      url: /
+    - title: Projects
+      url: /projects/
+    - title: Writing
+      url: /writing/
+    - title: Contact
+      url: /contact/
+
   hub:
     - title: Projects
       url: /projects/
@@ -8,16 +18,16 @@ menus:
       url: https://github.com/gabrielcapilla
       icon: github
 
-  dotman:
+  writing:
     - title: Back to Hub
       url: /
       icon: arrow-left
-    - title: Overview
-      url: /projects/dotman/
-    - title: Docs
-      url: /projects/dotman/docs/
+    - title: Writing
+      url: /writing/
+    - title: Projects
+      url: /projects/
     - title: GitHub
-      url: https://github.com/gabrielcapilla/dotman
+      url: https://github.com/gabrielcapilla
       icon: github
 
 mobile:
@@ -32,13 +42,16 @@ mobile:
       url: /writing/
       icon: pen
 
-  dotman:
-    - title: Overview
-      url: /projects/dotman/
-      icon: terminal
-    - title: Docs
-      url: /projects/dotman/docs/
-      icon: book
+  writing:
+    - title: Home
+      url: /
+      icon: home
+    - title: Writing
+      url: /writing/
+      icon: pen
+    - title: Projects
+      url: /projects/
+      icon: layers
     - title: GitHub
-      url: https://github.com/gabrielcapilla/dotman
+      url: https://github.com/gabrielcapilla
       icon: github

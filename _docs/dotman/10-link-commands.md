@@ -1,6 +1,7 @@
 ---
 title: Link Commands
 slug: link-commands
+project: dotman
 category: Commands
 order: 10
 ---

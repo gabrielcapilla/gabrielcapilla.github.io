@@ -1,9 +1,53 @@
 ---
 layout: project-home
-title: Dotman
-nav_menu: dotman
+title: dotman - Linux dotfiles manager
+display_title: dotman
+description: The modern dotfiles manager for Linux. Native performance, zero dependencies, multi-profile support.
+permalink: /projects/dotman/
+redirect_from:
+  - /dotman/
+  - /dotman
+image:
+  path: /preview.webp
+  alt: dotman Linux dotfiles manager
+seo:
+  name: dotman
+  type: SoftwareApplication
+  links:
+    - https://github.com/gabrielcapilla/dotman
+status: Active
+icon: "~"
+icon_name: command
+featured: true
+show_on_home: true
+home_order: 1
+github_stars:
+  show_in_cards: false
+repository: https://github.com/gabrielcapilla/dotman
+docs_url: /projects/dotman/docs/
+docs_description: Comprehensive documentation for Dotman.
+
+landing:
+  enabled: true
+  hero:
+    enabled: true
+    visible: true
+  features:
+    enabled: true
+    visible: true
+  community:
+    enabled: true
+    visible: true
+  install:
+    enabled: true
+    visible: true
+  alternative_install:
+    enabled: true
+    visible: true
 
 hero:
+  visual: none
+  show_symbol: true
   title: The Modern <br/> Dotfiles Manager
   subtitle: Stop fighting with broken symlinks. Dotman just works.<br class="hidden-mobile" /> The faster, smarter alternative to GNU Stow written in Nim.
 
@@ -31,8 +75,6 @@ features:
   - title: Intuitive syntax
     description: Forget memorizing complex flags. The CLI is designed to be human-readable. Commands like `add`, `remove`, `set` and `unset` do exactly what you expect them to do. Everything just makes sense. You're in full control.
 
-show_community: true
-
 community:
   - title: The dotfiles manager<br/>made with love
     icon: heart
@@ -49,6 +91,7 @@ install:
   subtitle: No dependencies, no complex setup. Just a single binary ready to run.
 
 install_cmd: "curl -sL gabrielcapilla.github.io/install | sh -s dotman"
+install_display_cmd: "curl -sL gabrielcapilla.github.io/install | sh -s dotman"
 
 alternative_install:
   label: Prefer Nimble?
@@ -56,10 +99,4 @@ alternative_install:
     - label: nimble install dotman
       command: "nimble install https://github.com/gabrielcapilla/dotman.git@#head"
       tooltip_id: "nimble-copy-tooltip"
-
-permalink: /projects/dotman/
-
-redirect_from:
-  - /dotman/
-  - /dotman
 ---

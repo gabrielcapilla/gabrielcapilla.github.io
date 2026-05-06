@@ -1,34 +1,139 @@
 ---
 layout: default
+capabilities:
+    - copy
+    - hero-tilt
+    - reveal
+    - smooth-scroll
 ---
 
+{% assign hero_visual = page.hero.visual | default: nil %}
+{% if hero_visual == nil %}
+    {% if page.show_terminal == false %}
+        {% assign hero_visual = 'none' %}
+    {% elsif page.hero.image %}
+        {% assign hero_visual = 'image' %}
+    {% else %}
+        {% assign hero_visual = 'terminal' %}
+    {% endif %}
+{% endif %}
+{% if page.landing.enabled == nil %}
+    {% assign landing_enabled = true %}
+{% else %}
+    {% assign landing_enabled = page.landing.enabled %}
+{% endif %}
+{% if page.landing.hero.enabled == nil %}
+    {% assign hero_enabled = true %}
+{% else %}
+    {% assign hero_enabled = page.landing.hero.enabled %}
+{% endif %}
+{% if page.landing.hero.visible == nil %}
+    {% assign hero_visible = true %}
+{% else %}
+    {% assign hero_visible = page.landing.hero.visible %}
+{% endif %}
+{% if page.landing.features.enabled == nil %}
+    {% assign features_enabled = true %}
+{% else %}
+    {% assign features_enabled = page.landing.features.enabled %}
+{% endif %}
+{% if page.landing.features.visible == nil %}
+    {% assign features_visible = true %}
+{% else %}
+    {% assign features_visible = page.landing.features.visible %}
+{% endif %}
+{% if page.landing.community.enabled == nil %}
+    {% assign community_enabled = true %}
+{% else %}
+    {% assign community_enabled = page.landing.community.enabled %}
+{% endif %}
+{% if page.landing.community.visible == nil %}
+    {% assign community_visible = true %}
+{% else %}
+    {% assign community_visible = page.landing.community.visible %}
+{% endif %}
+{% if page.landing.install.enabled == nil %}
+    {% assign install_enabled = true %}
+{% else %}
+    {% assign install_enabled = page.landing.install.enabled %}
+{% endif %}
+{% if page.landing.install.visible == nil %}
+    {% assign install_visible = true %}
+{% else %}
+    {% assign install_visible = page.landing.install.visible %}
+{% endif %}
+{% if page.landing.alternative_install.enabled == nil %}
+    {% assign alternative_install_enabled = true %}
+{% else %}
+    {% assign alternative_install_enabled = page.landing.alternative_install.enabled %}
+{% endif %}
+{% if page.landing.alternative_install.visible == nil %}
+    {% assign alternative_install_visible = true %}
+{% else %}
+    {% assign alternative_install_visible = page.landing.alternative_install.visible %}
+{% endif %}
+
+{% if landing_enabled and hero_enabled and hero_visible %}
 <section class="hero-section hero--center">
-    <div class="hero-symbol">~</div>
+    {% if page.hero.show_symbol != false %}
+    <div class="hero-symbol">
+        {% assign hero_icon = page.icon | default: '~' %}
+        {% assign svg_icons = 'github,star,spark,boxes,command,arrow-left,arrow-right,home,layers,pen,terminal,book,package,download,copy,heart,calendar,clock,share,email,check,plus,minus,x-twitter,facebook,linkedin,whatsapp' | split: ',' %}
+        {% if svg_icons contains hero_icon %}
+        {% include components/icon.html name=hero_icon %}
+        {% else %}
+        {{ hero_icon }}
+        {% endif %}
+    </div>
+    {% endif %}
     <h1 class="hero-title">{{ page.hero.title }}</h1>
     <p class="hero-subtitle">{{ page.hero.subtitle }}</p>
 
     <div class="mt-6">
-        <a
-            href="{{ page.hero.cta_link | default: '#install' }}"
-            class="btn-primary"
-        >
+        <a href="{{ page.hero.cta_link | default: '#install' }}" class="btn-primary">
             {% include components/icon.html name='download' %} {{
             page.hero.cta_text | default: 'Get Started' }}
         </a>
     </div>
 
-    {% include components/terminal.html %}
+    {% if hero_visual == 'terminal' %}
+    <div class="mt-6">
+        {% include components/terminal.html %}
+    </div>
+    {% elsif hero_visual == 'image' and page.hero.image %}
+    <figure class="project-hero-visual">
+        <img
+            src="{{ page.hero.image | relative_url }}"
+            {% if page.hero.image_srcset %}
+            srcset="{{ page.hero.image_srcset }}"
+            {% endif %}
+            {% if page.hero.image_sizes %}
+            sizes="{{ page.hero.image_sizes }}"
+            {% endif %}
+            alt="{{ page.hero.image_alt | default: page.display_title | default: page.title | escape }}"
+            class="project-hero-image"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            {% if page.hero.image_width and page.hero.image_height %}
+            width="{{ page.hero.image_width }}"
+            height="{{ page.hero.image_height }}"
+            {% endif %}
+        />
+    </figure>
+    {% endif %}
 </section>
+{% endif %}
 
-{% if page.features %}
-<section id="features" class="features-section">
+{% if landing_enabled and features_enabled and features_visible and page.features %}
+<section id="features" class="features-section project-reveal" data-reveal>
     <div class="features-grid">
-        <div>
+        <div class="items-start project-reveal" data-reveal>
             <h2 class="feature-title-main">
                 {{ page.hero.feature_title | default: 'Native performance,<br />not
                 a script' }}
             </h2>
-            <div class="feature-text">
+            <div class="feature-text mt-4">
                 {{ page.hero.feature_description | default:
                 site.data.ui.default_feature_description }}
             </div>
@@ -36,20 +141,21 @@ layout: default
 
         <div class="pt-4">
             {% for feature in page.features %}
-            <div class="sub-feature">
+            <div class="sub-feature project-reveal" data-reveal>
                 <h3>{{ feature.title }}</h3>
-                <p class="feature-text">{{ feature.description }}</p>
+                <p>{{ feature.description }}</p>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
-{% endif %} {% if page.show_community %}
-<section class="community-section">
+{% if landing_enabled and community_enabled and community_visible and page.community %}
+<section class="community-section project-reveal" data-reveal>
     <div class="community-grid">
         {% for item in page.community %}
-        <div class="community-item">
+        <div class="community-item project-reveal" data-reveal>
             {% if forloop.first and item.icon %}
             <div class="flex justify-center mb-6">
                 {% include components/icon.html name=item.icon
@@ -64,7 +170,7 @@ layout: default
                 {{ item.title | default: 'Made with love' }}
             </h2>
             {% endif %}
-            <p class="community-description">
+            <p class="community-description mt-4">
                 {{ item.description | default: 'We&#39;re making a tool that we
                 enjoy using ourselves.' }}
             </p>
@@ -72,39 +178,34 @@ layout: default
         {% endfor %}
     </div>
 </section>
+{% endif %}
 
-{% endif %} {% if page.install_cmd %}
-
-<section id="install" class="install-section">
-    <h2 class="hero-title" style="font-size: 3rem; margin-bottom: 1.5rem">
+{% if landing_enabled and install_enabled and install_visible and page.install_cmd %}
+<section id="install" class="install-section project-reveal" data-reveal>
+    <h2 class="hero-title install-title">
         {{ page.install.title | default: 'Install in seconds' }}
     </h2>
-    <p class="hero-subtitle">
+    <p class="hero-subtitle mt-4">
         {{ page.install.subtitle | default: 'No dependencies, no complex setup.
         Just a single binary ready to run.' }}
     </p>
 
     <div
-        class="code-box-display"
+        class="code-box-display mt-6"
         data-copy="{{ page.install_cmd }}"
         data-tooltip="main-copy-tooltip"
     >
         <div class="code-content">
-            <span class="gray">$</span> <span class="yellow">curl</span> -sL
-            gabrielcapilla.github.io/install <span class="gray">|</span>
-            <span class="yellow">sh</span> -s dotman
+            <span class="text-muted-darker">$</span> {{ page.install_display_cmd | default: page.install_cmd }}
         </div>
-        <div
-            class="pl-4"
-            style="border-left: 1px solid rgba(255, 255, 255, 0.1)"
-        >
+        <div class="pl-4 border-l">
             {% include components/icon.html name='copy' class='copy-icon' %}
         </div>
         <div id="main-copy-tooltip" class="tooltip">Copied to clipboard</div>
     </div>
 
-    {% if page.alternative_install %}
-    <div class="text-muted flex items-center justify-center gap-2 flex-wrap">
+    {% if alternative_install_enabled and alternative_install_visible and page.alternative_install %}
+    <div class="text-muted flex items-center justify-center gap-2 flex-wrap mt-6">
         <span>{{ page.alternative_install.label }}</span>
         {% for alt in page.alternative_install.options %}
         <div

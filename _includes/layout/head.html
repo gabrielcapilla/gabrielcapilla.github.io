@@ -1,20 +1,60 @@
 <head>
-    <title>
-        {% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}
-    </title>
-    {% include layout/meta.html %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet"
+    <!-- Jekyll SEO Tag - Handles all meta tags automatically -->
+    {% seo %}
+
+    <!-- Custom Verification Tags -->
+    <meta
+        name="ocs-site-verification"
+        content="0fac32a31fa59cbadc13e2990138bef8"
     />
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+        rel="preload"
+        href="{{ '/assets/fonts/instrument-sans-latin-500-normal.woff2' | relative_url }}"
+        as="font"
+        type="font/woff2"
+        crossorigin
+    />
+    <link
+        rel="preload"
+        href="{{ '/assets/fonts/instrument-sans-latin-400-normal.woff2' | relative_url }}"
+        as="font"
+        type="font/woff2"
+        crossorigin
+    />
+    {% if page.hero.image_preload or page.hero.image %}
+    <link
+        rel="preload"
+        href="{{ page.hero.image_preload | default: page.hero.image | relative_url }}"
+        as="image"
+        type="image/webp"
+        fetchpriority="high"
+    />
+    {% endif %}
 
     <!-- CSS -->
     <link
         rel="stylesheet"
         href="{{ '/assets/css/styles.css' | relative_url }}"
+    />
+
+    {% if page.uses_splide or layout.uses_splide %}
+    <!-- Splide.js CSS (Slider/Carousel) -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css"
+        crossorigin="anonymous"
+    />
+    {% endif %}
+
+    <!-- Favicon -->
+    <link
+        rel="icon"
+        type="image/png"
+        href="{{ '/assets/favicon.png' | relative_url }}"
     />
 </head>

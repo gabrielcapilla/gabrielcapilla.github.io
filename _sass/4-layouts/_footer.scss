@@ -1,0 +1,113 @@
+footer {
+    padding-top: var(--space-7);
+    padding-bottom: var(--space-8);
+    margin-top: auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6) var(--space-5);
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    color: var(--text-white);
+    text-decoration: none;
+    transition: opacity var(--duration-fast);
+}
+
+.footer-brand:hover {
+    opacity: 0.8;
+}
+
+.brand-symbol {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xxl);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.brand-name {
+    font-size: var(--font-size-md);
+    font-weight: 500;
+}
+
+.footer-heading {
+    color: var(--text-white);
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-2);
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--duration-fast);
+}
+
+.footer-links a:hover {
+    color: var(--text-white);
+}
+
+.footer-links .disabled {
+    color: var(--text-muted);
+    opacity: 0.5;
+    cursor: default;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.copyright {
+    text-align: center;
+    margin-top: var(--space-7);
+    color: var(--text-muted-darker);
+    font-size: var(--font-size-sm);
+}
+
+@media (min-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-5);
+    }
+
+    .copyright {
+        text-align: left;
+        max-width: var(--content-width);
+        margin: var(--space-7) auto 0;
+        padding-left: var(--space-4);
+    }
+
+    footer {
+        padding-bottom: var(--space-6);
+    }
+}

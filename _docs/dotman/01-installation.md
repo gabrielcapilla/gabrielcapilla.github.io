@@ -1,6 +1,7 @@
 ---
 title: Installation
 slug: installation
+project: dotman
 category: Getting Started
 order: 1
 ---

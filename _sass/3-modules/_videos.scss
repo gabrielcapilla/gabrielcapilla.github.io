@@ -1,0 +1,74 @@
+/* Video Embed Wrapper Styling */
+.youtube-wrapper,
+.vimeo-wrapper {
+    position: relative;
+    width: min(100%, 48rem);
+    aspect-ratio: 16 / 9;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: var(--space-2);
+    overflow: hidden;
+    border: var(--border-hairline) solid var(--border-color);
+    background: rgb(0, 0, 0);
+
+    iframe {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Responsive video (16:9 aspect ratio) */
+.youtube-wrapper.aspect-ratio,
+.vimeo-wrapper.aspect-ratio {
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Square video (1:1 aspect ratio) */
+.youtube-wrapper.square,
+.vimeo-wrapper.square {
+    padding-bottom: 100%;
+    height: 0;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Vertical video (9:16 aspect ratio) */
+.youtube-wrapper.vertical,
+.vimeo-wrapper.vertical {
+    padding-bottom: 177.78%;
+    height: 0;
+
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .youtube-wrapper,
+    .vimeo-wrapper {
+        border-radius: var(--space-2);
+    }
+}

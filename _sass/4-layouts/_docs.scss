@@ -1,0 +1,220 @@
+/* --- Docs Layout & Sidebar --- */
+
+.docs-sidebar {
+    display: none;
+    width: var(--docs-sidebar-width);
+    flex-shrink: 0;
+}
+
+.sidebar-sticky {
+    // For sidebar sticky positioning
+    /* border: 0; */
+}
+
+.sidebar-group {
+    margin-bottom: var(--space-5);
+}
+
+.sidebar-title {
+    font-size: var(--font-size-ui);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    margin-bottom: var(--space-3);
+    color: var(--text-white);
+}
+
+.sidebar-link {
+    display: block;
+    color: var(--text-muted-darker);
+    text-decoration: none;
+    padding: var(--space-1) 0;
+    font-size: var(--font-size-ui);
+    transition: color var(--duration-fast);
+}
+
+.sidebar-link:hover {
+    color: var(--text-white);
+}
+
+.docs-main {
+    min-width: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+// Mobile: ensure content fits viewport
+@media (max-width: 1023px) {
+    .docs-main {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+}
+
+.docs-header {
+    margin-bottom: var(--space-6);
+}
+
+.docs-header h1 {
+    font-size: var(--font-size-3xl);
+    font-weight: 500;
+    color: var(--text-white);
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-2);
+}
+
+.docs-header p {
+    color: var(--text-muted);
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+}
+
+.docs-header hr {
+    border: 0;
+    border-top: var(--border-hairline) solid var(--border-color);
+    margin: var(--space-6) 0;
+}
+
+@include desktop {
+    .docs-sidebar {
+        display: block;
+        position: sticky;
+        top: var(--space-8);
+        height: calc(100vh - var(--space-9));
+        overflow-y: auto;
+    }
+}
+
+// Mobile TOC
+.mobile-toc {
+    margin-bottom: var(--space-5);
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--radius-lg);
+    background: var(--surface-hover);
+    border: var(--border-hairline) solid var(--border-color);
+    text-align: center;
+}
+
+.mobile-toc h4 {
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--text-white);
+}
+
+.mobile-toc-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    justify-content: center;
+}
+
+.mobile-toc-link {
+    font-size: var(--font-size-ui);
+    background: var(--primary-blue);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    color: var(--text-white);
+    text-decoration: none;
+    transition: background-color var(--duration-fast);
+}
+
+.mobile-toc-link:hover {
+    background-color: rgb(30, 58, 138);
+}
+
+// Docs Grid (for feature cards in docs)
+.docs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    list-style: none !important;
+    padding-left: 0 !important;
+}
+
+@include tablet {
+    .docs-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.docs-card {
+    /* This need to be fixed, Im not happy with the result */
+    background: var(--surface-glass);
+    padding: var(--space-3);
+    border-radius: var(--space-2);
+    border: var(--border-hairline) solid var(--surface-hover);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+    font-size: var(--font-size-base);
+}
+
+.docs-callout {
+    padding: var(--space-3);
+    margin-top: var(--space-3);
+    margin-bottom: var(--space-5);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.docs-callout p {
+    margin: 0;
+    color: var(--status-default-text);
+    font-size: var(--font-size-base);
+}
+
+.docs-callout--info {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: var(--space-1) solid rgb(59, 130, 246);
+}
+
+// Status Items in docs
+.status-list {
+    margin-bottom: var(--space-5);
+}
+
+.status-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.status-item p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.status-item strong {
+    color: var(--text-white);
+}
+
+.status-dot {
+    width: var(--space-2);
+    height: var(--space-2);
+    border-radius: 50%;
+    margin-top: var(--space-1);
+    flex-shrink: 0;
+}
+
+.bg-green {
+    background-color: var(--color-green-light);
+}
+.bg-yellow {
+    background-color: var(--color-code-name);
+}
+.bg-red {
+    background-color: var(--color-red);
+}
+.bg-purple {
+    background-color: var(--color-purple-solid);
+}
+
+.text-blue {
+    color: var(--color-code-text);
+}
+.text-gray {
+    color: var(--color-neutral-muted);
+}
