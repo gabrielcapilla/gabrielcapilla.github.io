@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
 
-declare -r RAW_URL="https://raw.githubusercontent.com/gabrielcapilla"
+declare -r RAW_URL="https://github.com/gabrielcapilla"
 declare -r DEFAULT_BRANCH="main"
 declare -r DEFAULT_SCRIPT="install.sh"
 
@@ -53,9 +53,9 @@ declare -r SCRIPT_NAME="${REPO_PATH##*/}"
 
 declare SCRIPT_URL
 if [[ "${REPO_PATH}" == */* ]]; then
-  SCRIPT_URL="${RAW_URL}/${REPO_NAME}/${DEFAULT_BRANCH}/${SCRIPT_NAME}"
+  SCRIPT_URL="${RAW_URL}/${REPO_NAME}/raw/refs/heads/${DEFAULT_BRANCH}/${SCRIPT_NAME}"
 else
-  SCRIPT_URL="${RAW_URL}/${REPO_NAME}/${DEFAULT_BRANCH}/${DEFAULT_SCRIPT}"
+  SCRIPT_URL="${RAW_URL}/${REPO_NAME}/raw/refs/heads/${DEFAULT_BRANCH}/${DEFAULT_SCRIPT}"
 fi
 
 HTTP_CODE=$(curl -sSL -o /dev/null -w "%{http_code}" "${SCRIPT_URL}")
