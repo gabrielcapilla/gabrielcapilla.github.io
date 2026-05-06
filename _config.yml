@@ -104,6 +104,7 @@ include:
   - _pages
 
 exclude:
+  - AGENTS.md
   - node_modules
   - package.json
   - package-lock.json
@@ -117,3 +118,6 @@ exclude:
   - .sass-cache
   - .jekyll-cache
   - scripts
+  - _docs/component-guide.md
+  - _docs/splide-guide.md
+  - _docs/technical-analysis.md
