@@ -1,0 +1,439 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+export LC_ALL=C
+umask 077
+
+readonly GITHUB_OWNER="gabrielcapilla"
+readonly RELEASE_ROOT="https://github.com/${GITHUB_OWNER}"
+readonly MANIFEST_NAME="install.manifest"
+readonly MAX_MANIFEST_BYTES=16384
+readonly MAX_MANIFEST_LINE_BYTES=512
+readonly MAX_ARTIFACT_BYTES=67108864
+readonly DOWNLOAD_TIMEOUT_SECONDS=300
+readonly VERSION_RE='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
+readonly NAME_RE='^[A-Za-z0-9][A-Za-z0-9._-]*$'
+readonly TOKEN_RE='^[a-z0-9][a-z0-9._-]*$'
+
+if [[ -z "${HOME:-}" ]]; then
+  echo "Error: HOME must be set" >&2
+  exit 1
+fi
+
+declare -r INSTALL_DIR="${INSTALL_DIR:-${HOME}/.local/bin}"
+
+declare DOWNLOAD_DIR=""
+declare INSTALL_STAGE=""
+declare MANIFEST_PROJECT=""
+declare MANIFEST_VERSION=""
+declare MANIFEST_BINARY=""
+declare SELECTED_FILENAME=""
+declare SELECTED_DIGEST=""
+declare SELECTED_SIZE=""
+declare HOST_OS=""
+declare HOST_ARCH=""
+declare HOST_VARIANT=""
+declare ARTIFACT_COUNT=0
+declare -A ARTIFACT_FILENAME=()
+declare -A ARTIFACT_DIGEST=()
+declare -A ARTIFACT_SIZE=()
+declare -A ARTIFACT_KEY_BY_FILENAME=()
+
+fail() {
+  printf 'Error: %s\n' "$*" >&2
+  exit 1
+}
+
+usage() {
+  cat >&2 <<'USAGE'
+Usage: curl -fsSL https://gabrielcapilla.github.io/install | bash -s <project>
+
+The project must be a repository under github.com/gabrielcapilla/ and must
+publish an install.manifest asset in a v<major>.<minor>.<patch> release.
+USAGE
+  exit 1
+}
+
+cleanup() {
+  if [[ -n "${INSTALL_STAGE}" && ( -e "${INSTALL_STAGE}" || -L "${INSTALL_STAGE}" ) ]]; then
+    rm -f -- "${INSTALL_STAGE}" || true
+  fi
+  if [[ -n "${DOWNLOAD_DIR}" && -d "${DOWNLOAD_DIR}" ]]; then
+    rm -rf -- "${DOWNLOAD_DIR}" || true
+  fi
+}
+
+require_command() {
+  command -v "$1" >/dev/null 2>&1 || fail "${1} is required"
+}
+
+check_dependencies() {
+  local command_name
+
+  for command_name in curl mktemp mkdir install mv rm uname wc; do
+    require_command "${command_name}"
+  done
+
+  if ! command -v sha256sum >/dev/null 2>&1 && ! command -v shasum >/dev/null 2>&1; then
+    fail "sha256sum or shasum is required"
+  fi
+}
+
+byte_count() {
+  local count
+
+  count=$(wc -c < "$1") || fail "could not measure ${1}"
+  count="${count//[[:space:]]/}"
+  [[ "${count}" =~ ^[0-9]+$ ]] || fail "invalid byte count for ${1}"
+  printf '%s\n' "${count}"
+}
+
+sha256_file() {
+  local output digest
+
+  if command -v sha256sum >/dev/null 2>&1; then
+    output=$(sha256sum -- "$1") || fail "could not hash ${1}"
+  else
+    output=$(shasum -a 256 "$1") || fail "could not hash ${1}"
+  fi
+
+  read -r digest _ <<< "${output}"
+  [[ "${digest}" =~ ^[0-9a-f]{64}$ ]] || fail "invalid SHA-256 output for ${1}"
+  printf '%s\n' "${digest}"
+}
+
+download_url() {
+  local url="$1"
+  local output="$2"
+  local max_bytes="$3"
+
+  if ! curl \
+    --fail \
+    --location \
+    --silent \
+    --show-error \
+    --retry 2 \
+    --connect-timeout 10 \
+    --max-time "${DOWNLOAD_TIMEOUT_SECONDS}" \
+    --max-filesize "${max_bytes}" \
+    --proto '=https' \
+    --proto-redir '=https' \
+    --tlsv1.2 \
+    --output "${output}" \
+    "${url}"; then
+    fail "download failed: ${url}"
+  fi
+}
+
+validate_project_name() {
+  local project="$1"
+
+  [[ "${project}" =~ ${NAME_RE} ]] || fail "invalid project name: ${project}"
+  [[ "${project}" != "." && "${project}" != ".." ]] || fail "invalid project name: ${project}"
+}
+
+validate_name() {
+  local value="$1"
+  local description="$2"
+
+  [[ "${value}" =~ ${NAME_RE} ]] || fail "invalid ${description}: ${value}"
+}
+
+validate_token() {
+  local value="$1"
+  local description="$2"
+
+  [[ "${value}" =~ ${TOKEN_RE} ]] || fail "invalid ${description}: ${value}"
+}
+
+validate_version() {
+  [[ "$1" =~ ${VERSION_RE} ]] || fail "invalid version: $1"
+}
+
+parse_manifest() {
+  local manifest_path="$1"
+  local requested_project="$2"
+  local line key field_count os arch variant filename digest size artifact_key
+  local header_stage=0
+  local manifest_bytes
+  local -a fields=()
+
+  [[ -f "${manifest_path}" ]] || fail "manifest is not a regular file"
+  manifest_bytes=$(byte_count "${manifest_path}")
+  (( manifest_bytes <= MAX_MANIFEST_BYTES )) || fail "manifest exceeds ${MAX_MANIFEST_BYTES} bytes"
+
+  MANIFEST_PROJECT=""
+  MANIFEST_VERSION=""
+  MANIFEST_BINARY=""
+  ARTIFACT_COUNT=0
+  ARTIFACT_FILENAME=()
+  ARTIFACT_DIGEST=()
+  ARTIFACT_SIZE=()
+  ARTIFACT_KEY_BY_FILENAME=()
+
+  while IFS= read -r line || [[ -n "${line}" ]]; do
+    [[ -n "${line}" ]] || fail "manifest contains a blank line"
+    [[ "${line}" != *$'\r'* ]] || fail "manifest must use LF line endings"
+    [[ "${line}" != *$'\t'* ]] || fail "manifest must not contain tabs"
+    (( ${#line} <= MAX_MANIFEST_LINE_BYTES )) || fail "manifest line exceeds ${MAX_MANIFEST_LINE_BYTES} bytes"
+
+    fields=()
+    IFS='|' read -r -a fields <<< "${line}"
+    field_count=${#fields[@]}
+    key="${fields[0]:-}"
+
+    case "${key}" in
+      format)
+        (( field_count == 2 )) || fail "format record must have two fields"
+        (( header_stage == 0 )) || fail "format record is out of order or duplicated"
+        [[ "${fields[1]}" == "1" ]] || fail "unsupported manifest format: ${fields[1]}"
+        header_stage=1
+        ;;
+      project)
+        (( field_count == 2 )) || fail "project record must have two fields"
+        (( header_stage == 1 )) || fail "project record is out of order or duplicated"
+        validate_name "${fields[1]}" "manifest project"
+        MANIFEST_PROJECT="${fields[1]}"
+        header_stage=2
+        ;;
+      version)
+        (( field_count == 2 )) || fail "version record must have two fields"
+        (( header_stage == 2 )) || fail "version record is out of order or duplicated"
+        validate_version "${fields[1]}"
+        MANIFEST_VERSION="${fields[1]}"
+        header_stage=3
+        ;;
+      binary)
+        (( field_count == 2 )) || fail "binary record must have two fields"
+        (( header_stage == 3 )) || fail "binary record is out of order or duplicated"
+        validate_name "${fields[1]}" "manifest binary"
+        MANIFEST_BINARY="${fields[1]}"
+        header_stage=4
+        ;;
+      artifact)
+        (( field_count == 7 )) || fail "artifact record must have seven fields"
+        (( header_stage == 4 )) || fail "artifact record appears before the headers"
+
+        os="${fields[1]}"
+        arch="${fields[2]}"
+        variant="${fields[3]}"
+        filename="${fields[4]}"
+        digest="${fields[5]}"
+        size="${fields[6]}"
+
+        validate_token "${os}" "artifact operating system"
+        validate_token "${arch}" "artifact architecture"
+        validate_token "${variant}" "artifact CPU variant"
+        validate_name "${filename}" "artifact filename"
+        [[ "${digest}" =~ ^[0-9a-f]{64}$ ]] || fail "invalid SHA-256 for ${filename}"
+        [[ "${size}" =~ ^[1-9][0-9]*$ ]] || fail "invalid size for ${filename}"
+        (( size <= MAX_ARTIFACT_BYTES )) || fail "artifact ${filename} exceeds ${MAX_ARTIFACT_BYTES} bytes"
+
+        artifact_key="${os}|${arch}|${variant}"
+        [[ -z "${ARTIFACT_FILENAME[${artifact_key}]+present}" ]] || fail "duplicate artifact target: ${artifact_key}"
+        [[ -z "${ARTIFACT_KEY_BY_FILENAME[${filename}]+present}" ]] || fail "duplicate artifact filename: ${filename}"
+
+        ARTIFACT_FILENAME["${artifact_key}"]="${filename}"
+        ARTIFACT_DIGEST["${artifact_key}"]="${digest}"
+        ARTIFACT_SIZE["${artifact_key}"]="${size}"
+        ARTIFACT_KEY_BY_FILENAME["${filename}"]="${artifact_key}"
+        ARTIFACT_COUNT=$((ARTIFACT_COUNT + 1))
+        ;;
+      *)
+        fail "unknown manifest record: ${key}"
+        ;;
+    esac
+  done < "${manifest_path}"
+
+  (( header_stage == 4 )) || fail "manifest is missing one or more headers"
+  (( ARTIFACT_COUNT > 0 )) || fail "manifest contains no artifacts"
+  [[ "${MANIFEST_PROJECT}" == "${requested_project}" ]] || fail "manifest project does not match ${requested_project}"
+}
+
+cpu_flag_on_every_processor() {
+  local wanted_flag="$1"
+  local line flags
+  local processor_count=0
+  local flags_count=0
+
+  [[ -r /proc/cpuinfo ]] || return 1
+
+  while IFS= read -r line; do
+    case "${line}" in
+      processor*:*)
+        processor_count=$((processor_count + 1))
+        ;;
+      flags*:*|Features*:*)
+        flags_count=$((flags_count + 1))
+        flags="${line#*:}"
+        [[ " ${flags} " == *" ${wanted_flag} "* ]] || return 1
+        ;;
+    esac
+  done < /proc/cpuinfo
+
+  (( processor_count > 0 && flags_count == processor_count ))
+}
+
+supports_x86_64_v3() {
+  local flag
+  local required_flags=(
+    cx16 lahf_lm popcnt pni ssse3 sse4_1 sse4_2
+    avx avx2 bmi1 bmi2 f16c fma movbe xsave
+  )
+
+  for flag in "${required_flags[@]}"; do
+    cpu_flag_on_every_processor "${flag}" || return 1
+  done
+
+  cpu_flag_on_every_processor lzcnt || cpu_flag_on_every_processor abm
+}
+
+detect_host() {
+  local system_name machine_name
+
+  system_name=$(uname -s) || fail "could not detect operating system"
+  machine_name=$(uname -m) || fail "could not detect architecture"
+
+  case "${system_name}" in
+    Linux) HOST_OS="linux" ;;
+    Darwin) HOST_OS="darwin" ;;
+    *) fail "unsupported operating system: ${system_name}" ;;
+  esac
+
+  case "${machine_name}" in
+    x86_64|amd64) HOST_ARCH="x86_64" ;;
+    aarch64|arm64) HOST_ARCH="aarch64" ;;
+    *) fail "unsupported architecture: ${machine_name}" ;;
+  esac
+
+  HOST_VARIANT="baseline"
+  if [[ "${HOST_OS}" == "linux" && "${HOST_ARCH}" == "x86_64" ]] && supports_x86_64_v3; then
+    HOST_VARIANT="x86-64-v3"
+  fi
+}
+
+select_artifact() {
+  local host_os="$1"
+  local host_arch="$2"
+  local host_variant="$3"
+  local artifact_key
+
+  if [[ "${host_variant}" == "x86-64-v3" ]]; then
+    artifact_key="${host_os}|${host_arch}|x86-64-v3"
+    if [[ -n "${ARTIFACT_FILENAME[${artifact_key}]+present}" ]]; then
+      SELECTED_FILENAME="${ARTIFACT_FILENAME[${artifact_key}]}"
+      SELECTED_DIGEST="${ARTIFACT_DIGEST[${artifact_key}]}"
+      SELECTED_SIZE="${ARTIFACT_SIZE[${artifact_key}]}"
+      return 0
+    fi
+  fi
+
+  artifact_key="${host_os}|${host_arch}|baseline"
+  if [[ -n "${ARTIFACT_FILENAME[${artifact_key}]+present}" ]]; then
+    SELECTED_FILENAME="${ARTIFACT_FILENAME[${artifact_key}]}"
+    SELECTED_DIGEST="${ARTIFACT_DIGEST[${artifact_key}]}"
+    SELECTED_SIZE="${ARTIFACT_SIZE[${artifact_key}]}"
+    return 0
+  fi
+
+  fail "no compatible artifact for ${host_os}/${host_arch}/${host_variant}"
+}
+
+verify_download() {
+  local file_path="$1"
+  local expected_size="$2"
+  local expected_digest="$3"
+  local actual_size actual_digest
+
+  [[ -s "${file_path}" ]] || fail "downloaded artifact is empty"
+  actual_size=$(byte_count "${file_path}")
+  [[ "${actual_size}" == "${expected_size}" ]] || fail "artifact size mismatch"
+  actual_digest=$(sha256_file "${file_path}")
+  [[ "${actual_digest}" == "${expected_digest}" ]] || fail "artifact SHA-256 mismatch"
+}
+
+install_artifact() {
+  local artifact_path="$1"
+  local destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
+
+  mkdir -p -- "${INSTALL_DIR}"
+
+  if [[ -e "${destination}" || -L "${destination}" ]]; then
+    [[ -f "${destination}" || -L "${destination}" ]] || fail "installation destination is not a file: ${destination}"
+  fi
+
+  INSTALL_STAGE=$(mktemp "${INSTALL_DIR}/.${MANIFEST_BINARY}.XXXXXX") || fail "could not create installation staging file"
+  install -m 0755 "${artifact_path}" "${INSTALL_STAGE}" || fail "could not stage ${MANIFEST_BINARY}"
+  verify_download "${INSTALL_STAGE}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"
+  mv -f -- "${INSTALL_STAGE}" "${destination}" || fail "could not install ${MANIFEST_BINARY}"
+  INSTALL_STAGE=""
+
+  [[ -x "${destination}" ]] || fail "installed file is not executable"
+}
+
+report_path_hint() {
+  case ":${PATH:-}:" in
+    *":${INSTALL_DIR}:"*) ;;
+    *)
+      printf 'Warning: %s is not in PATH.\n' "${INSTALL_DIR}" >&2
+      printf 'Add this to your shell profile if desired:\n' >&2
+      printf "  export PATH=\"%s:\$PATH\"\n" "${INSTALL_DIR}" >&2
+      ;;
+  esac
+}
+
+main() {
+  local project manifest_url pinned_manifest_url release_tag
+  local discovery_manifest pinned_manifest discovery_digest pinned_digest
+  local artifact_path destination
+
+  if (( $# > 0 )) && [[ "$1" == "--" ]]; then
+    shift
+  fi
+  if (( $# == 1 )) && [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    usage
+  fi
+  (( $# == 1 )) || usage
+
+  project="$1"
+  validate_project_name "${project}"
+  check_dependencies
+
+  DOWNLOAD_DIR=$(mktemp -d "${TMPDIR:-/tmp}/generic-install.XXXXXX") || fail "could not create temporary directory"
+  trap cleanup EXIT INT TERM
+
+  discovery_manifest="${DOWNLOAD_DIR}/discovery.manifest"
+  manifest_url="${RELEASE_ROOT}/${project}/releases/latest/download/${MANIFEST_NAME}"
+  printf ':: resolving %s\n' "${project}"
+  download_url "${manifest_url}" "${discovery_manifest}" "${MAX_MANIFEST_BYTES}"
+  parse_manifest "${discovery_manifest}" "${project}"
+  discovery_digest=$(sha256_file "${discovery_manifest}")
+
+  release_tag="v${MANIFEST_VERSION}"
+  pinned_manifest="${DOWNLOAD_DIR}/pinned.manifest"
+  pinned_manifest_url="${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${MANIFEST_NAME}"
+  download_url "${pinned_manifest_url}" "${pinned_manifest}" "${MAX_MANIFEST_BYTES}"
+  pinned_digest=$(sha256_file "${pinned_manifest}")
+  [[ "${discovery_digest}" == "${pinned_digest}" ]] || fail "latest and pinned manifests differ"
+  parse_manifest "${pinned_manifest}" "${project}"
+
+  detect_host
+  select_artifact "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
+
+  artifact_path="${DOWNLOAD_DIR}/${SELECTED_FILENAME}"
+  printf ':: downloading %s (%s/%s/%s)\n' "${SELECTED_FILENAME}" "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
+  download_url \
+    "${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${SELECTED_FILENAME}" \
+    "${artifact_path}" \
+    "${MAX_ARTIFACT_BYTES}"
+  verify_download "${artifact_path}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"
+
+  destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
+  install_artifact "${artifact_path}"
+  printf 'Installed %s %s to %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
+  report_path_hint
+}
+
+if [[ "${INSTALL_ROUTER_TESTING:-0}" != "1" ]]; then
+  main "$@"
+fi
