@@ -46,10 +46,13 @@ fail() {
 
 usage() {
   cat >&2 <<'USAGE'
-Usage: curl -fsSL https://gabrielcapilla.github.io/install | bash -s <project>
+Usage: curl -fsSL https://gabrielcapilla.github.io/experimental | bash -s -- <project> [--force]
 
 The project must be a repository under github.com/gabrielcapilla/ and must
 publish an install.manifest asset in a v<major>.<minor>.<patch> release.
+
+Add --force after the project name to reinstall an artifact that already
+matches the latest manifest.
 USAGE
   exit 1
 }
@@ -352,6 +355,23 @@ verify_download() {
   [[ "${actual_digest}" == "${expected_digest}" ]] || fail "artifact SHA-256 mismatch"
 }
 
+artifact_matches() {
+  local file_path="$1"
+  local expected_size="$2"
+  local expected_digest="$3"
+  local actual_size actual_digest
+
+  [[ -f "${file_path}" && -x "${file_path}" ]] || return 1
+  if ! actual_size=$(byte_count "${file_path}"); then
+    return 1
+  fi
+  [[ "${actual_size}" == "${expected_size}" ]] || return 1
+  if ! actual_digest=$(sha256_file "${file_path}"); then
+    return 1
+  fi
+  [[ "${actual_digest}" == "${expected_digest}" ]]
+}
+
 install_artifact() {
   local artifact_path="$1"
   local destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
@@ -383,19 +403,38 @@ report_path_hint() {
 }
 
 main() {
-  local project manifest_url pinned_manifest_url release_tag
+  local project="" manifest_url pinned_manifest_url release_tag
   local discovery_manifest pinned_manifest discovery_digest pinned_digest
-  local artifact_path destination
+  local artifact_path destination force_install=0
 
   if (( $# > 0 )) && [[ "$1" == "--" ]]; then
     shift
   fi
-  if (( $# == 1 )) && [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    usage
-  fi
-  (( $# == 1 )) || usage
 
-  project="$1"
+  while (( $# > 0 )); do
+    case "$1" in
+      --force)
+        force_install=1
+        ;;
+      --help|-h)
+        usage
+        ;;
+      --)
+        fail "unexpected argument separator"
+        ;;
+      -* )
+        fail "unknown option: $1"
+        ;;
+      *)
+        [[ -z "${project}" ]] || usage
+        project="$1"
+        ;;
+    esac
+    shift
+  done
+
+  [[ -n "${project}" ]] || usage
+
   validate_project_name "${project}"
   check_dependencies
 
@@ -420,6 +459,26 @@ main() {
   detect_host
   select_artifact "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
 
+  destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
+  if [[ -e "${destination}" || -L "${destination}" ]]; then
+    [[ -f "${destination}" || -L "${destination}" ]] || fail "installation destination is not a file: ${destination}"
+  fi
+
+  if (( force_install == 0 )) && artifact_matches "${destination}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"; then
+    printf 'Installed %s %s already matches the latest artifact at %s\n' \
+      "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
+    report_path_hint
+    return 0
+  fi
+
+  if (( force_install == 1 )); then
+    printf ':: forcing reinstall of %s %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+  elif [[ -e "${destination}" || -L "${destination}" ]]; then
+    printf ':: updating %s to %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+  else
+    printf ':: installing %s %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+  fi
+
   artifact_path="${DOWNLOAD_DIR}/${SELECTED_FILENAME}"
   printf ':: downloading %s (%s/%s/%s)\n' "${SELECTED_FILENAME}" "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
   download_url \
@@ -428,7 +487,6 @@ main() {
     "${MAX_ARTIFACT_BYTES}"
   verify_download "${artifact_path}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"
 
-  destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
   install_artifact "${artifact_path}"
   printf 'Installed %s %s to %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
   report_path_hint
