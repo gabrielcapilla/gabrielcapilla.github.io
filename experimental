@@ -15,6 +15,22 @@ readonly VERSION_RE='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Z
 readonly NAME_RE='^[A-Za-z0-9][A-Za-z0-9._-]*$'
 readonly TOKEN_RE='^[a-z0-9][a-z0-9._-]*$'
 
+if [[ -t 1 ]]; then
+  readonly ACTION_OUT=$'\033[1;33m::\033[0m'
+  readonly SUCCESS_OUT=$'\033[1;32m::\033[0m'
+else
+  readonly ACTION_OUT="::"
+  readonly SUCCESS_OUT="::"
+fi
+
+if [[ -t 2 ]]; then
+  readonly ACTION_ERR=$'\033[1;33m::\033[0m'
+  readonly FAILURE_ERR=$'\033[1;31m::\033[0m'
+else
+  readonly ACTION_ERR="::"
+  readonly FAILURE_ERR="::"
+fi
+
 if [[ -z "${HOME:-}" ]]; then
   echo "Error: HOME must be set" >&2
   exit 1
@@ -40,7 +56,7 @@ declare -A ARTIFACT_SIZE=()
 declare -A ARTIFACT_KEY_BY_FILENAME=()
 
 fail() {
-  printf 'Error: %s\n' "$*" >&2
+  printf '%b %s\n' "${FAILURE_ERR}" "$*" >&2
   exit 1
 }
 
@@ -385,8 +401,8 @@ confirm_replacement() {
     fail "refusing to replace ${destination} without confirmation; rerun with --force"
   fi
 
-  printf ':: %s already exists at %s and will be replaced. Continue? [y/N] ' \
-    "${MANIFEST_BINARY}" "${destination}" >&2
+  printf '%b replace existing %s with %s? [y/N] ' \
+    "${ACTION_ERR}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" >&2
   if ! IFS= read -r answer < /dev/tty; then
     fail "could not read installation confirmation"
   fi
@@ -395,7 +411,7 @@ confirm_replacement() {
     y|Y|yes|YES|Yes)
       ;;
     *)
-      printf '\n:: installation cancelled\n' >&2
+      printf '\n%b installation cancelled\n' "${ACTION_ERR}" >&2
       return 1
       ;;
   esac
@@ -424,8 +440,8 @@ report_path_hint() {
   case ":${PATH:-}:" in
     *":${INSTALL_DIR}:"*) ;;
     *)
-      printf 'Warning: %s is not in PATH.\n' "${INSTALL_DIR}" >&2
-      printf 'Add this to your shell profile if desired:\n' >&2
+      printf '%b warning: %s is not in PATH.\n' "${ACTION_ERR}" "${INSTALL_DIR}" >&2
+      printf '%b add this to your shell profile:\n' "${ACTION_ERR}" >&2
       printf "  export PATH=\"%s:\$PATH\"\n" "${INSTALL_DIR}" >&2
       ;;
   esac
@@ -486,7 +502,7 @@ main() {
 
   pinned_manifest="${DOWNLOAD_DIR}/pinned.manifest"
   if [[ -n "${requested_version}" ]]; then
-    printf ':: resolving %s@%s\n' "${project}" "${requested_version}"
+    printf '%b resolving %s@%s\n' "${ACTION_OUT}" "${project}" "${requested_version}"
     release_tag="v${requested_version}"
     pinned_manifest_url="${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${MANIFEST_NAME}"
     download_url "${pinned_manifest_url}" "${pinned_manifest}" "${MAX_MANIFEST_BYTES}"
@@ -496,7 +512,7 @@ main() {
   else
     discovery_manifest="${DOWNLOAD_DIR}/discovery.manifest"
     manifest_url="${RELEASE_ROOT}/${project}/releases/latest/download/${MANIFEST_NAME}"
-    printf ':: resolving %s\n' "${project}"
+    printf '%b resolving %s\n' "${ACTION_OUT}" "${project}"
     download_url "${manifest_url}" "${discovery_manifest}" "${MAX_MANIFEST_BYTES}"
     parse_manifest "${discovery_manifest}" "${project}"
     discovery_digest=$(sha256_file "${discovery_manifest}")
@@ -518,8 +534,8 @@ main() {
   fi
 
   if (( force_install == 0 )) && artifact_matches "${destination}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"; then
-    printf 'Installed %s %s already matches the latest artifact at %s\n' \
-      "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
+    printf '%b %s %s already current\n' \
+      "${SUCCESS_OUT}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
     report_path_hint
     return 0
   fi
@@ -529,15 +545,15 @@ main() {
   fi
 
   if (( force_install == 1 )); then
-    printf ':: forcing reinstall of %s %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+    printf '%b reinstalling %s %s\n' "${ACTION_OUT}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
   elif [[ -e "${destination}" || -L "${destination}" ]]; then
-    printf ':: updating %s to %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+    printf '%b replacing %s with %s\n' "${ACTION_OUT}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
   else
-    printf ':: installing %s %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
+    printf '%b installing %s %s\n' "${ACTION_OUT}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}"
   fi
 
   artifact_path="${DOWNLOAD_DIR}/${SELECTED_FILENAME}"
-  printf ':: downloading %s (%s/%s/%s)\n' "${SELECTED_FILENAME}" "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
+  printf '%b downloading %s (%s/%s/%s)\n' "${ACTION_OUT}" "${SELECTED_FILENAME}" "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
   download_url \
     "${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${SELECTED_FILENAME}" \
     "${artifact_path}" \
@@ -545,7 +561,7 @@ main() {
   verify_download "${artifact_path}" "${SELECTED_SIZE}" "${SELECTED_DIGEST}"
 
   install_artifact "${artifact_path}"
-  printf 'Installed %s %s to %s\n' "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
+  printf '%b installed %s %s to %s\n' "${SUCCESS_OUT}" "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
   report_path_hint
 }
 
