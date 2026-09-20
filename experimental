@@ -55,12 +55,12 @@ declare -A ARTIFACT_DIGEST=()
 declare -A ARTIFACT_SIZE=()
 declare -A ARTIFACT_KEY_BY_FILENAME=()
 
-fail() {
+function fail() {
   printf '%b %s\n' "${FAILURE_ERR}" "$*" >&2
   exit 1
 }
 
-usage() {
+function usage() {
   cat >&2 <<'USAGE'
 Usage: curl -fsSL https://gabrielcapilla.github.io/experimental | bash -s -- <project[@version]> [--force]
 
@@ -76,7 +76,7 @@ USAGE
   exit 1
 }
 
-cleanup() {
+function cleanup() {
   if [[ -n "${INSTALL_STAGE}" && ( -e "${INSTALL_STAGE}" || -L "${INSTALL_STAGE}" ) ]]; then
     rm -f -- "${INSTALL_STAGE}" || true
   fi
@@ -85,11 +85,11 @@ cleanup() {
   fi
 }
 
-require_command() {
+function require_command() {
   command -v "$1" >/dev/null 2>&1 || fail "${1} is required"
 }
 
-check_dependencies() {
+function check_dependencies() {
   local command_name
 
   for command_name in curl mktemp mkdir install mv rm uname wc; do
@@ -101,7 +101,7 @@ check_dependencies() {
   fi
 }
 
-byte_count() {
+function byte_count() {
   local count
 
   count=$(wc -c < "$1") || fail "could not measure ${1}"
@@ -110,7 +110,7 @@ byte_count() {
   printf '%s\n' "${count}"
 }
 
-sha256_file() {
+function sha256_file() {
   local output digest
 
   if command -v sha256sum >/dev/null 2>&1; then
@@ -124,7 +124,7 @@ sha256_file() {
   printf '%s\n' "${digest}"
 }
 
-download_url() {
+function download_url() {
   local url="$1"
   local output="$2"
   local max_bytes="$3"
@@ -147,32 +147,32 @@ download_url() {
   fi
 }
 
-validate_project_name() {
+function validate_project_name() {
   local project="$1"
 
   [[ "${project}" =~ ${NAME_RE} ]] || fail "invalid project name: ${project}"
   [[ "${project}" != "." && "${project}" != ".." ]] || fail "invalid project name: ${project}"
 }
 
-validate_name() {
+function validate_name() {
   local value="$1"
   local description="$2"
 
   [[ "${value}" =~ ${NAME_RE} ]] || fail "invalid ${description}: ${value}"
 }
 
-validate_token() {
+function validate_token() {
   local value="$1"
   local description="$2"
 
   [[ "${value}" =~ ${TOKEN_RE} ]] || fail "invalid ${description}: ${value}"
 }
 
-validate_version() {
+function validate_version() {
   [[ "$1" =~ ${VERSION_RE} ]] || fail "invalid version: $1"
 }
 
-parse_manifest() {
+function parse_manifest() {
   local manifest_path="$1"
   local requested_project="$2"
   local line key field_count os arch variant filename digest size artifact_key
@@ -272,7 +272,7 @@ parse_manifest() {
   [[ "${MANIFEST_PROJECT}" == "${requested_project}" ]] || fail "manifest project does not match ${requested_project}"
 }
 
-cpu_flag_on_every_processor() {
+function cpu_flag_on_every_processor() {
   local wanted_flag="$1"
   local line flags
   local processor_count=0
@@ -296,7 +296,7 @@ cpu_flag_on_every_processor() {
   (( processor_count > 0 && flags_count == processor_count ))
 }
 
-supports_x86_64_v3() {
+function supports_x86_64_v3() {
   local flag
   local required_flags=(
     cx16 lahf_lm popcnt pni ssse3 sse4_1 sse4_2
@@ -310,7 +310,7 @@ supports_x86_64_v3() {
   cpu_flag_on_every_processor lzcnt || cpu_flag_on_every_processor abm
 }
 
-detect_host() {
+function detect_host() {
   local system_name machine_name
 
   system_name=$(uname -s) || fail "could not detect operating system"
@@ -334,7 +334,7 @@ detect_host() {
   fi
 }
 
-select_artifact() {
+function select_artifact() {
   local host_os="$1"
   local host_arch="$2"
   local host_variant="$3"
@@ -361,7 +361,7 @@ select_artifact() {
   fail "no compatible artifact for ${host_os}/${host_arch}/${host_variant}"
 }
 
-verify_download() {
+function verify_download() {
   local file_path="$1"
   local expected_size="$2"
   local expected_digest="$3"
@@ -374,7 +374,7 @@ verify_download() {
   [[ "${actual_digest}" == "${expected_digest}" ]] || fail "artifact SHA-256 mismatch"
 }
 
-artifact_matches() {
+function artifact_matches() {
   local file_path="$1"
   local expected_size="$2"
   local expected_digest="$3"
@@ -391,7 +391,7 @@ artifact_matches() {
   [[ "${actual_digest}" == "${expected_digest}" ]]
 }
 
-confirm_replacement() {
+function confirm_replacement() {
   local destination="$1"
   local force_install="$2"
   local answer
@@ -417,7 +417,7 @@ confirm_replacement() {
   esac
 }
 
-install_artifact() {
+function install_artifact() {
   local artifact_path="$1"
   local destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
 
@@ -436,7 +436,7 @@ install_artifact() {
   [[ -x "${destination}" ]] || fail "installed file is not executable"
 }
 
-report_path_hint() {
+function report_path_hint() {
   case ":${PATH:-}:" in
     *":${INSTALL_DIR}:"*) ;;
     *)
@@ -447,7 +447,7 @@ report_path_hint() {
   esac
 }
 
-main() {
+function main() {
   local target="" project="" requested_version=""
   local manifest_url pinned_manifest_url release_tag
   local discovery_manifest pinned_manifest discovery_digest pinned_digest
