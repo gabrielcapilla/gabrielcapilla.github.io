@@ -6,13 +6,10 @@ umask 077
 
 readonly GITHUB_OWNER="gabrielcapilla"
 readonly RELEASE_ROOT="https://github.com/${GITHUB_OWNER}"
-readonly DEFAULT_BRANCH="main"
-readonly DEFAULT_SCRIPT="install.sh"
 readonly MANIFEST_NAME="install.manifest"
 readonly MAX_MANIFEST_BYTES=16384
 readonly MAX_MANIFEST_LINE_BYTES=512
 readonly MAX_ARTIFACT_BYTES=67108864
-readonly MAX_LEGACY_SCRIPT_BYTES=16384
 readonly DOWNLOAD_TIMEOUT_SECONDS=300
 readonly VERSION_RE='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
 readonly NAME_RE='^[A-Za-z0-9][A-Za-z0-9._-]*$'
@@ -83,10 +80,6 @@ installing it.
 
 Add --force after the project name to reinstall an artifact that already
 matches the selected manifest and to approve replacement without prompting.
-
-An unversioned project without a manifest may use the legacy install.sh from
-its main branch. Pinned versions never use the legacy fallback. The older
-project/script.sh form remains available for legacy repositories.
 USAGE
   exit 1
 }
@@ -160,80 +153,6 @@ function download_url() {
     "${url}"; then
     fail "download failed: ${url}"
   fi
-}
-
-function probe_manifest() {
-  local url="$1"
-  local output="$2"
-  local status
-
-  if ! status=$(curl \
-    --location \
-    --silent \
-    --show-error \
-    --retry 2 \
-    --connect-timeout 10 \
-    --max-time "${DOWNLOAD_TIMEOUT_SECONDS}" \
-    --max-filesize "${MAX_MANIFEST_BYTES}" \
-    --proto '=https' \
-    --proto-redir '=https' \
-    --tlsv1.2 \
-    --output "${output}" \
-    --write-out '%{http_code}' \
-    "${url}"); then
-    fail "manifest request failed: ${url}"
-  fi
-
-  case "${status}" in
-    200)
-      return 0
-      ;;
-    404)
-      rm -f -- "${output}"
-      return 1
-      ;;
-    *)
-      fail "manifest request returned HTTP ${status}: ${url}"
-      ;;
-  esac
-}
-
-function run_legacy_install() {
-  local repo_path="$1"
-  local preview_only="$2"
-  local force_install="$3"
-  shift 3
-
-  local repo_name="${repo_path%%/*}"
-  local script_name="${repo_path##*/}"
-  local legacy_script_path="${DOWNLOAD_DIR}/legacy-install.sh"
-  local -a legacy_args=("$@")
-
-  if [[ "${repo_path}" != */* ]]; then
-    script_name="${DEFAULT_SCRIPT}"
-  else
-    [[ "${repo_path}" != */*/* ]] || fail "legacy script path must be project/script.sh"
-    validate_project_name "${repo_name}"
-    validate_name "${script_name}" "legacy script name"
-  fi
-
-  local legacy_script_url="${RELEASE_ROOT}/${repo_name}/raw/refs/heads/${DEFAULT_BRANCH}/${script_name}"
-
-  if (( force_install == 1 )); then
-    legacy_args=("--force" "${legacy_args[@]}")
-  fi
-
-  printf '%b using legacy installer for %s\n' "${ACTION_OUT}" "${repo_path}"
-  download_url "${legacy_script_url}" "${legacy_script_path}" "${MAX_LEGACY_SCRIPT_BYTES}"
-  [[ -s "${legacy_script_path}" ]] || fail "legacy installer is empty: ${legacy_script_url}"
-
-  if (( preview_only == 1 )); then
-    printf '%b previewing %s\n\n' "${ACTION_OUT}" "${legacy_script_url}"
-    cat -- "${legacy_script_path}"
-    return 0
-  fi
-
-  bash -s -- "${legacy_args[@]}" < "${legacy_script_path}"
 }
 
 function validate_project_name() {
@@ -554,7 +473,6 @@ function main() {
   local manifest_url pinned_manifest_url release_tag
   local discovery_manifest pinned_manifest discovery_digest pinned_digest
   local artifact_path destination force_install=0 preview_only=0
-  local -a legacy_args=()
 
   if (( $# > 0 )) && [[ "$1" == "--" ]]; then
     shift
@@ -572,9 +490,7 @@ function main() {
         usage
         ;;
       --)
-        shift
-        legacy_args=("$@")
-        break
+        fail "unexpected argument separator"
         ;;
       -* )
         fail "unknown option: $1"
@@ -590,17 +506,6 @@ function main() {
   [[ -n "${target}" ]] || usage
   (( force_install == 0 || preview_only == 0 )) || fail "--preview cannot be combined with --force"
 
-  if [[ "${target}" == */* ]]; then
-    [[ "${target}" != */*/* ]] || fail "legacy script path must be project/script.sh"
-    validate_project_name "${target%%/*}"
-    validate_name "${target#*/}" "legacy script name"
-    check_dependencies
-    DOWNLOAD_DIR=$(mktemp -d "${TMPDIR:-/tmp}/generic-install.XXXXXX") || fail "could not create temporary directory"
-    trap cleanup EXIT INT TERM
-    run_legacy_install "${target}" "${preview_only}" "${force_install}" "${legacy_args[@]}"
-    return $?
-  fi
-
   if [[ "${target}" == *"@"* ]]; then
     project="${target%%@*}"
     requested_version="${target#*@}"
@@ -614,9 +519,6 @@ function main() {
     validate_version "${requested_version}"
   elif [[ "${target}" == *"@"* ]]; then
     fail "invalid version: ${target#*@}"
-  fi
-  if (( ${#legacy_args[@]} > 0 )) && [[ -n "${requested_version}" ]]; then
-    fail "additional arguments are not supported for a pinned release"
   fi
   check_dependencies
 
@@ -636,10 +538,7 @@ function main() {
     discovery_manifest="${DOWNLOAD_DIR}/discovery.manifest"
     manifest_url="${RELEASE_ROOT}/${project}/releases/latest/download/${MANIFEST_NAME}"
     printf '%b resolving %s\n' "${ACTION_OUT}" "${project}"
-    if ! probe_manifest "${manifest_url}" "${discovery_manifest}"; then
-      run_legacy_install "${project}" "${preview_only}" "${force_install}" "${legacy_args[@]}"
-      return $?
-    fi
+    download_url "${manifest_url}" "${discovery_manifest}" "${MAX_MANIFEST_BYTES}"
     parse_manifest "${discovery_manifest}" "${project}"
     discovery_digest=$(sha256_file "${discovery_manifest}")
 
@@ -650,8 +549,6 @@ function main() {
     [[ "${discovery_digest}" == "${pinned_digest}" ]] || fail "latest and pinned manifests differ"
     parse_manifest "${pinned_manifest}" "${project}"
   fi
-
-  (( ${#legacy_args[@]} == 0 )) || fail "additional arguments are only supported by legacy install.sh"
 
   detect_host
   select_artifact "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
