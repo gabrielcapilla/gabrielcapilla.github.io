@@ -46,10 +46,13 @@ fail() {
 
 usage() {
   cat >&2 <<'USAGE'
-Usage: curl -fsSL https://gabrielcapilla.github.io/experimental | bash -s -- <project> [--force]
+Usage: curl -fsSL https://gabrielcapilla.github.io/experimental | bash -s -- <project[@version]> [--force]
 
 The project must be a repository under github.com/gabrielcapilla/ and must
 publish an install.manifest asset in a v<major>.<minor>.<patch> release.
+
+Use project@version or project@vversion to install an exact release. Without an
+explicit version, the latest release is selected.
 
 Add --force after the project name to reinstall an artifact that already
 matches the latest manifest.
@@ -403,7 +406,8 @@ report_path_hint() {
 }
 
 main() {
-  local project="" manifest_url pinned_manifest_url release_tag
+  local target="" project="" requested_version=""
+  local manifest_url pinned_manifest_url release_tag
   local discovery_manifest pinned_manifest discovery_digest pinned_digest
   local artifact_path destination force_install=0
 
@@ -426,35 +430,58 @@ main() {
         fail "unknown option: $1"
         ;;
       *)
-        [[ -z "${project}" ]] || usage
-        project="$1"
+        [[ -z "${target}" ]] || usage
+        target="$1"
         ;;
     esac
     shift
   done
 
-  [[ -n "${project}" ]] || usage
+  [[ -n "${target}" ]] || usage
+
+  if [[ "${target}" == *"@"* ]]; then
+    project="${target%%@*}"
+    requested_version="${target#*@}"
+    requested_version="${requested_version#v}"
+  else
+    project="${target}"
+  fi
 
   validate_project_name "${project}"
+  if [[ -n "${requested_version}" ]]; then
+    validate_version "${requested_version}"
+  elif [[ "${target}" == *"@"* ]]; then
+    fail "invalid version: ${target#*@}"
+  fi
   check_dependencies
 
   DOWNLOAD_DIR=$(mktemp -d "${TMPDIR:-/tmp}/generic-install.XXXXXX") || fail "could not create temporary directory"
   trap cleanup EXIT INT TERM
 
-  discovery_manifest="${DOWNLOAD_DIR}/discovery.manifest"
-  manifest_url="${RELEASE_ROOT}/${project}/releases/latest/download/${MANIFEST_NAME}"
-  printf ':: resolving %s\n' "${project}"
-  download_url "${manifest_url}" "${discovery_manifest}" "${MAX_MANIFEST_BYTES}"
-  parse_manifest "${discovery_manifest}" "${project}"
-  discovery_digest=$(sha256_file "${discovery_manifest}")
-
-  release_tag="v${MANIFEST_VERSION}"
   pinned_manifest="${DOWNLOAD_DIR}/pinned.manifest"
-  pinned_manifest_url="${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${MANIFEST_NAME}"
-  download_url "${pinned_manifest_url}" "${pinned_manifest}" "${MAX_MANIFEST_BYTES}"
-  pinned_digest=$(sha256_file "${pinned_manifest}")
-  [[ "${discovery_digest}" == "${pinned_digest}" ]] || fail "latest and pinned manifests differ"
-  parse_manifest "${pinned_manifest}" "${project}"
+  if [[ -n "${requested_version}" ]]; then
+    printf ':: resolving %s@%s\n' "${project}" "${requested_version}"
+    release_tag="v${requested_version}"
+    pinned_manifest_url="${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${MANIFEST_NAME}"
+    download_url "${pinned_manifest_url}" "${pinned_manifest}" "${MAX_MANIFEST_BYTES}"
+    parse_manifest "${pinned_manifest}" "${project}"
+    [[ "${MANIFEST_VERSION}" == "${requested_version}" ]] || \
+      fail "requested version ${requested_version} does not match manifest version ${MANIFEST_VERSION}"
+  else
+    discovery_manifest="${DOWNLOAD_DIR}/discovery.manifest"
+    manifest_url="${RELEASE_ROOT}/${project}/releases/latest/download/${MANIFEST_NAME}"
+    printf ':: resolving %s\n' "${project}"
+    download_url "${manifest_url}" "${discovery_manifest}" "${MAX_MANIFEST_BYTES}"
+    parse_manifest "${discovery_manifest}" "${project}"
+    discovery_digest=$(sha256_file "${discovery_manifest}")
+
+    release_tag="v${MANIFEST_VERSION}"
+    pinned_manifest_url="${RELEASE_ROOT}/${project}/releases/download/${release_tag}/${MANIFEST_NAME}"
+    download_url "${pinned_manifest_url}" "${pinned_manifest}" "${MAX_MANIFEST_BYTES}"
+    pinned_digest=$(sha256_file "${pinned_manifest}")
+    [[ "${discovery_digest}" == "${pinned_digest}" ]] || fail "latest and pinned manifests differ"
+    parse_manifest "${pinned_manifest}" "${project}"
+  fi
 
   detect_host
   select_artifact "${HOST_OS}" "${HOST_ARCH}" "${HOST_VARIANT}"
