@@ -55,7 +55,7 @@ Use project@version or project@vversion to install an exact release. Without an
 explicit version, the latest release is selected.
 
 Add --force after the project name to reinstall an artifact that already
-matches the latest manifest.
+matches the selected manifest and to approve replacement without prompting.
 USAGE
   exit 1
 }
@@ -375,6 +375,32 @@ artifact_matches() {
   [[ "${actual_digest}" == "${expected_digest}" ]]
 }
 
+confirm_replacement() {
+  local destination="$1"
+  local force_install="$2"
+  local answer
+
+  (( force_install == 1 )) && return 0
+  if [[ ! -r /dev/tty || ! -t 2 ]]; then
+    fail "refusing to replace ${destination} without confirmation; rerun with --force"
+  fi
+
+  printf ':: %s already exists at %s and will be replaced. Continue? [y/N] ' \
+    "${MANIFEST_BINARY}" "${destination}" >&2
+  if ! IFS= read -r answer < /dev/tty; then
+    fail "could not read installation confirmation"
+  fi
+
+  case "${answer}" in
+    y|Y|yes|YES|Yes)
+      ;;
+    *)
+      printf '\n:: installation cancelled\n' >&2
+      return 1
+      ;;
+  esac
+}
+
 install_artifact() {
   local artifact_path="$1"
   local destination="${INSTALL_DIR}/${MANIFEST_BINARY}"
@@ -496,6 +522,10 @@ main() {
       "${MANIFEST_BINARY}" "${MANIFEST_VERSION}" "${destination}"
     report_path_hint
     return 0
+  fi
+
+  if [[ -e "${destination}" || -L "${destination}" ]]; then
+    confirm_replacement "${destination}" "${force_install}"
   fi
 
   if (( force_install == 1 )); then
